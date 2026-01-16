@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background -->
+  <rect width="128" height="128" rx="24" fill="#15171a"/>
+
+  <!-- Calendar body -->
+  <rect x="24" y="36" width="80" height="72" rx="8" fill="#fff"/>
+
+  <!-- Calendar header -->
+  <rect x="24" y="36" width="80" height="20" rx="8" fill="#30cf43"/>
+  <rect x="24" y="48" width="80" height="8" fill="#30cf43"/>
+
+  <!-- Calendar rings -->
+  <rect x="40" y="28" width="6" height="16" rx="3" fill="#738a94"/>
+  <rect x="82" y="28" width="6" height="16" rx="3" fill="#738a94"/>
+
+  <!-- Calendar grid dots -->
+  <circle cx="44" cy="72" r="4" fill="#e6e6e6"/>
+  <circle cx="64" cy="72" r="4" fill="#e6e6e6"/>
+  <circle cx="84" cy="72" r="4" fill="#30cf43"/>
+  <circle cx="44" cy="92" r="4" fill="#30cf43"/>
+  <circle cx="64" cy="92" r="4" fill="#e6e6e6"/>
+  <circle cx="84" cy="92" r="4" fill="#e6e6e6"/>
+
+  <!-- Ghost -->
+  <g transform="translate(68, 12)">
+    <!-- Ghost body -->
+    <path d="M24 8c-11 0-20 9-20 20v20c0 2 3 2 4 0v-4c0-2 3-2 4 0v4c0 2 3 2 4 0v-4c0-2 3-2 4 0v4c0 2 3 2 4 0v-4c0-2 3-2 4 0v4c0 2 3 2 4 0V28c0-11-9-20-20-20z" fill="#fff" opacity="0.95"/>
+    <!-- Ghost eyes -->
+    <circle cx="18" cy="24" r="3" fill="#15171a"/>
+    <circle cx="30" cy="24" r="3" fill="#15171a"/>
+    <!-- Ghost cheeks -->
+    <circle cx="14" cy="30" r="2" fill="#30cf43" opacity="0.4"/>
+    <circle cx="34" cy="30" r="2" fill="#30cf43" opacity="0.4"/>
+  </g>
+</svg>

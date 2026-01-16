@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost Calendar</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Заголовок -->
+    <header class="header">
+      <h1>Запланировано</h1>
+      <div class="header-actions">
+        <div class="view-toggle">
+          <button class="toggle-btn active" data-view="list" title="Список">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2 3h12v2H2V3zm0 4h12v2H2V7zm0 4h12v2H2v-2z"/>
+            </svg>
+          </button>
+          <button class="toggle-btn" data-view="calendar" title="Календарь">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 0v1H1a1 1 0 00-1 1v13a1 1 0 001 1h14a1 1 0 001-1V2a1 1 0 00-1-1h-3V0h-2v1H6V0H4zm11 5H1v10h14V5zM3 7h2v2H3V7zm4 0h2v2H7V7zm4 0h2v2h-2V7zM3 11h2v2H3v-2zm4 0h2v2H7v-2z"/>
+            </svg>
+          </button>
+        </div>
+        <button class="settings-btn" id="open-settings" title="Настройки">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 4.754a3.246 3.246 0 100 6.492 3.246 3.246 0 000-6.492zM5.754 8a2.246 2.246 0 114.492 0 2.246 2.246 0 01-4.492 0z"/>
+            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 01-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 01-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 01.52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 011.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 011.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 01.52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 01-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 01-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 002.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 001.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 00-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 00-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 00-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 001.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 003.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 002.692-1.115l.094-.319z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Состояние загрузки -->
+    <div class="state loading" id="loading-state">
+      <div class="spinner"></div>
+      <p>Загрузка постов...</p>
+    </div>
+
+    <!-- Состояние ошибки -->
+    <div class="state error" id="error-state" style="display: none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="#ef4444">
+        <path d="M24 4C12.96 4 4 12.96 4 24s8.96 20 20 20 20-8.96 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"/>
+      </svg>
+      <p id="error-message">Ошибка загрузки</p>
+      <button class="retry-btn" id="retry-btn">Повторить</button>
+    </div>
+
+    <!-- Пустое состояние -->
+    <div class="state empty" id="empty-state" style="display: none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="#9ca3af">
+        <path d="M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm0 32H10V14h28v24z"/>
+      </svg>
+      <p>Нет запланированных постов</p>
+    </div>
+
+    <!-- Режим списка -->
+    <div class="view list-view" id="list-view" style="display: none;">
+      <div class="posts-list" id="posts-list"></div>
+    </div>
+
+    <!-- Режим календаря -->
+    <div class="view calendar-view" id="calendar-view" style="display: none;">
+      <div class="calendar-nav">
+        <button class="nav-btn" id="prev-month">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+          </svg>
+        </button>
+        <span class="month-title" id="month-title">Январь 2024</span>
+        <button class="nav-btn" id="next-month">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="calendar-grid">
+        <div class="weekdays">
+          <span>Пн</span>
+          <span>Вт</span>
+          <span>Ср</span>
+          <span>Чт</span>
+          <span>Пт</span>
+          <span>Сб</span>
+          <span>Вс</span>
+        </div>
+        <div class="days" id="calendar-days"></div>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <script src="../lib/api.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
