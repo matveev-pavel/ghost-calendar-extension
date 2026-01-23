@@ -227,6 +227,83 @@ function renderPostTags(post) {
   `;
 }
 
+function setupTagListeners() {
+  // Удаление тега
+  postsList.querySelectorAll('.tag-remove').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const chip = e.target.closest('.tag-chip');
+      const container = e.target.closest('.post-tags');
+      const postId = container.dataset.postId;
+      const tagName = chip.dataset.tagName;
+
+      const post = posts.find(p => String(p.id) === postId);
+      if (!post) return;
+
+      const newTags = (post.tags || []).filter(t => t.name !== tagName);
+      try {
+        const updated = await api.updatePostTags(postId, newTags, post.updated_at);
+        post.tags = updated.tags;
+        post.updated_at = updated.updated_at;
+        chip.remove();
+      } catch (err) {
+        console.error('Ошибка удаления тега:', err);
+      }
+    });
+  });
+
+  // Добавление тега — клик на "+"
+  postsList.querySelectorAll('.tag-add').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const container = e.target.closest('.post-tags');
+      if (container.querySelector('.tag-input')) return;
+
+      const input = document.createElement('input');
+      input.className = 'tag-input';
+      input.placeholder = 'тег...';
+      input.setAttribute('list', 'tags-datalist');
+      container.insertBefore(input, btn);
+      btn.style.display = 'none';
+      input.focus();
+
+      input.addEventListener('keydown', async (ev) => {
+        if (ev.key === 'Enter' && input.value.trim()) {
+          const tagName = input.value.trim();
+          const postId = container.dataset.postId;
+          const post = posts.find(p => String(p.id) === postId);
+          if (!post) return;
+
+          const newTags = [...(post.tags || []), { name: tagName }];
+          try {
+            const updated = await api.updatePostTags(postId, newTags, post.updated_at);
+            post.tags = updated.tags;
+            post.updated_at = updated.updated_at;
+            const postEl = postsList.querySelector(`[data-id="${postId}"]`);
+            const tagsContainer = postEl.querySelector('.post-tags');
+            tagsContainer.outerHTML = renderPostTags(post);
+            setupTagListeners();
+          } catch (err) {
+            console.error('Ошибка добавления тега:', err);
+          }
+        } else if (ev.key === 'Escape') {
+          input.remove();
+          btn.style.display = '';
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (container.contains(input)) {
+            input.remove();
+            btn.style.display = '';
+          }
+        }, 150);
+      });
+    });
+  });
+}
+
 // Рендер календаря
 function renderCalendar() {
   const year = currentMonth.getFullYear();
