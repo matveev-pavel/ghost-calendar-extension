@@ -15,7 +15,6 @@ const calendarView = document.getElementById('calendar-view');
 const postsList = document.getElementById('posts-list');
 const calendarDays = document.getElementById('calendar-days');
 const monthTitle = document.getElementById('month-title');
-const tooltip = document.getElementById('tooltip');
 const errorMessage = document.getElementById('error-message');
 
 // Названия месяцев
@@ -135,7 +134,6 @@ async function loadPosts() {
 
 // Рендер списка
 function renderList() {
-  // Группируем посты по дням
   const grouped = {};
 
   posts.forEach(post => {
@@ -143,15 +141,11 @@ function renderList() {
     const dateKey = date.toISOString().split('T')[0];
 
     if (!grouped[dateKey]) {
-      grouped[dateKey] = {
-        date,
-        posts: []
-      };
+      grouped[dateKey] = { date, posts: [] };
     }
     grouped[dateKey].posts.push(post);
   });
 
-  // Сортируем по дате
   const sortedDates = Object.keys(grouped).sort();
 
   postsList.innerHTML = sortedDates.map(dateKey => {
@@ -160,39 +154,77 @@ function renderList() {
 
     const postsHtml = group.posts.map(post => {
       const time = formatTime(new Date(post.published_at));
+      const isScheduled = post.status === 'scheduled';
+      const statusClass = isScheduled ? 'status-scheduled' : 'status-published';
+      const statusText = isScheduled ? 'запланирован' : 'опубликован';
+      const dragHandle = isScheduled
+        ? '<div class="drag-handle" draggable="true">⠿</div>'
+        : '';
+
       const imageHtml = post.feature_image
         ? `<img class="post-image" src="${escapeHtml(post.feature_image)}" alt="">`
         : `<div class="post-image post-image-placeholder"></div>`;
+
       const excerptHtml = post.custom_excerpt
         ? `<span class="post-excerpt">${escapeHtml(post.custom_excerpt)}</span>`
         : '';
+
+      const tagsHtml = renderPostTags(post);
+
       return `
-        <div class="post-item" data-id="${escapeHtml(String(post.id))}">
+        <div class="post-item ${isScheduled ? 'draggable' : ''}"
+             data-id="${escapeHtml(String(post.id))}"
+             data-status="${post.status}"
+             data-updated-at="${escapeHtml(post.updated_at)}">
+          ${dragHandle}
           ${imageHtml}
           <div class="post-content">
             <span class="post-title">${escapeHtml(post.title)}</span>
             ${excerptHtml}
-            <span class="post-time">${time}</span>
+            <div class="post-meta">
+              <span class="post-time">${time}</span>
+              <span class="post-status ${statusClass}">${statusText}</span>
+            </div>
+            ${tagsHtml}
           </div>
         </div>
       `;
     }).join('');
 
     return `
-      <div class="date-group">
+      <div class="date-group" data-date="${dateKey}">
         <div class="date-header">${dateStr}</div>
         ${postsHtml}
       </div>
     `;
   }).join('');
 
-  // Клик на пост
+  // Клик на пост — открыть редактор
   postsList.querySelectorAll('.post-item').forEach(item => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.drag-handle') || e.target.closest('.tag-chip') ||
+          e.target.closest('.tag-add') || e.target.closest('.tag-input')) return;
       const postId = item.dataset.id;
       openEditor(postId);
     });
   });
+
+  setupTagListeners();
+  setupDragAndDrop();
+}
+
+function renderPostTags(post) {
+  const tags = post.tags || [];
+  const tagsChips = tags.map(tag =>
+    `<span class="tag-chip" data-tag-id="${escapeHtml(tag.id)}" data-tag-name="${escapeHtml(tag.name)}">${escapeHtml(tag.name)}<span class="tag-remove">×</span></span>`
+  ).join('');
+
+  return `
+    <div class="post-tags" data-post-id="${escapeHtml(String(post.id))}">
+      ${tagsChips}
+      <span class="tag-add" title="Добавить тег">+</span>
+    </div>
+  `;
 }
 
 // Рендер календаря
