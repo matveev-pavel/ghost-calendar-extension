@@ -5,9 +5,30 @@ const testBtn = document.getElementById('test-btn');
 const statusDiv = document.getElementById('status');
 const openIntegrationsLink = document.getElementById('open-integrations');
 
+// Валидация URL блога
+function validateBlogUrl(url) {
+  if (!url) {
+    throw new Error('URL блога не указан');
+  }
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'https:') {
+      throw new Error('URL должен использовать HTTPS для безопасного соединения');
+    }
+    // Возвращаем нормализованный origin без trailing slash
+    return parsed.origin;
+  } catch (e) {
+    if (e.message.includes('HTTPS')) {
+      throw e;
+    }
+    throw new Error('Неверный формат URL блога');
+  }
+}
+
 // Загрузка сохранённых настроек
 async function loadSettings() {
-  const { blogUrl, apiKey } = await chrome.storage.sync.get(['blogUrl', 'apiKey']);
+  const { blogUrl, apiKey } = await chrome.storage.local.get(['blogUrl', 'apiKey']);
   if (blogUrl) blogUrlInput.value = blogUrl;
   if (apiKey) apiKeyInput.value = apiKey;
 }
@@ -28,6 +49,15 @@ async function generateToken(apiKey) {
   const [id, secret] = apiKey.split(':');
   if (!id || !secret) {
     throw new Error('Неверный формат API ключа');
+  }
+
+  // Валидация hex-формата secret
+  if (!/^[a-f0-9]+$/i.test(secret)) {
+    throw new Error('Неверный формат secret. Secret должен быть в hex формате');
+  }
+
+  if (secret.length % 2 !== 0) {
+    throw new Error('Неверная длина secret. Длина должна быть чётной');
   }
 
   // Декодируем hex secret в байты
@@ -71,11 +101,18 @@ async function generateToken(apiKey) {
 
 // Тестирование подключения
 async function testConnection() {
-  const blogUrl = blogUrlInput.value.trim().replace(/\/$/, '');
   const apiKey = apiKeyInput.value.trim();
 
-  if (!blogUrl || !apiKey) {
+  if (!blogUrlInput.value.trim() || !apiKey) {
     showStatus('Заполните все поля', 'error');
+    return false;
+  }
+
+  let blogUrl;
+  try {
+    blogUrl = validateBlogUrl(blogUrlInput.value.trim());
+  } catch (e) {
+    showStatus(e.message, 'error');
     return false;
   }
 
@@ -108,18 +145,25 @@ async function testConnection() {
 async function saveSettings(e) {
   e.preventDefault();
 
-  const blogUrl = blogUrlInput.value.trim().replace(/\/$/, '');
   const apiKey = apiKeyInput.value.trim();
 
-  if (!blogUrl || !apiKey) {
+  if (!blogUrlInput.value.trim() || !apiKey) {
     showStatus('Заполните все поля', 'error');
+    return;
+  }
+
+  let blogUrl;
+  try {
+    blogUrl = validateBlogUrl(blogUrlInput.value.trim());
+  } catch (e) {
+    showStatus(e.message, 'error');
     return;
   }
 
   showStatus('Сохранение...', 'loading');
 
   try {
-    await chrome.storage.sync.set({ blogUrl, apiKey });
+    await chrome.storage.local.set({ blogUrl, apiKey });
     showStatus('Настройки сохранены!', 'success');
   } catch (error) {
     showStatus(`Ошибка сохранения: ${error.message}`, 'error');
@@ -129,11 +173,11 @@ async function saveSettings(e) {
 // Открыть страницу интеграций Ghost
 function openIntegrations(e) {
   e.preventDefault();
-  const blogUrl = blogUrlInput.value.trim().replace(/\/$/, '');
-  if (blogUrl) {
+  try {
+    const blogUrl = validateBlogUrl(blogUrlInput.value.trim());
     chrome.tabs.create({ url: `${blogUrl}/ghost/#/settings/integrations` });
-  } else {
-    showStatus('Сначала введите URL блога', 'error');
+  } catch (err) {
+    showStatus(err.message || 'Сначала введите URL блога', 'error');
   }
 }
 

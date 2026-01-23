@@ -47,13 +47,15 @@ function setupEventListeners() {
   document.getElementById('retry-btn').addEventListener('click', loadPosts);
 
   // Навигация по календарю
-  document.getElementById('prev-month').addEventListener('click', () => {
+  document.getElementById('prev-month').addEventListener('click', async () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
+    await loadMonthPosts();
     renderCalendar();
   });
 
-  document.getElementById('next-month').addEventListener('click', () => {
+  document.getElementById('next-month').addEventListener('click', async () => {
     currentMonth.setMonth(currentMonth.getMonth() + 1);
+    await loadMonthPosts();
     renderCalendar();
   });
 }
@@ -131,11 +133,39 @@ async function loadPosts() {
   }
 }
 
+// Подгрузка опубликованных постов для выбранного месяца
+async function loadMonthPosts() {
+  if (!api) return;
+  try {
+    const since = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+    const published = await api.getPublishedPosts(since);
+    // Добавляем новые посты, избегая дубликатов
+    const existingIds = new Set(posts.map(p => p.id));
+    const newPosts = published.filter(p => !existingIds.has(p.id));
+    if (newPosts.length > 0) {
+      posts = [...posts, ...newPosts].sort(
+        (a, b) => new Date(a.published_at) - new Date(b.published_at)
+      );
+    }
+  } catch (err) {
+    console.error('Ошибка загрузки месяца:', err);
+  }
+}
+
 // Рендер списка
 function renderList() {
   const grouped = {};
 
-  posts.forEach(post => {
+  // В списке показываем: все scheduled + published за вчера/сегодня
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayKey = yesterday.toISOString().split('T')[0];
+
+  const listPosts = posts.filter(post =>
+    post.status === 'scheduled' || post.published_at.split('T')[0] >= yesterdayKey
+  );
+
+  listPosts.forEach(post => {
     const date = new Date(post.published_at);
     const dateKey = date.toISOString().split('T')[0];
 
@@ -147,9 +177,12 @@ function renderList() {
 
   const sortedDates = Object.keys(grouped).sort();
 
+  const todayKey = new Date().toISOString().split('T')[0];
+
   postsList.innerHTML = sortedDates.map(dateKey => {
     const group = grouped[dateKey];
     const dateStr = formatDateHeader(group.date);
+    const isPast = dateKey < todayKey;
 
     const postsHtml = group.posts.map(post => {
       const time = formatTime(new Date(post.published_at));
@@ -173,7 +206,7 @@ function renderList() {
       return `
         <div class="post-item ${isScheduled ? 'draggable' : ''}"
              data-id="${escapeHtml(String(post.id))}"
-             data-status="${post.status}"
+             data-status="${escapeHtml(post.status)}"
              data-updated-at="${escapeHtml(post.updated_at)}">
           ${dragHandle}
           ${imageHtml}
@@ -191,7 +224,7 @@ function renderList() {
     }).join('');
 
     return `
-      <div class="date-group" data-date="${dateKey}">
+      <div class="date-group${isPast ? ' past' : ''}" data-date="${dateKey}">
         <div class="date-header">${dateStr}</div>
         ${postsHtml}
       </div>
@@ -241,7 +274,7 @@ function setupTagListeners() {
 
       const newTags = (post.tags || []).filter(t => t.name !== tagName);
       try {
-        const updated = await api.updatePostTags(postId, newTags, post.updated_at);
+        const updated = await api.updatePostTags(postId, newTags);
         post.tags = updated.tags;
         post.updated_at = updated.updated_at;
         chip.remove();
@@ -275,7 +308,7 @@ function setupTagListeners() {
 
           const newTags = [...(post.tags || []), { name: tagName }];
           try {
-            const updated = await api.updatePostTags(postId, newTags, post.updated_at);
+            const updated = await api.updatePostTags(postId, newTags);
             post.tags = updated.tags;
             post.updated_at = updated.updated_at;
             const postEl = postsList.querySelector(`[data-id="${postId}"]`);
@@ -349,11 +382,11 @@ function setupDragAndDrop() {
 
       // Сохраняем время, меняем только дату
       const oldDate = new Date(post.published_at);
-      const newDate = new Date(targetDate);
-      newDate.setHours(oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
+      const [year, mon, day] = targetDate.split('-').map(Number);
+      const newDate = new Date(year, mon - 1, day, oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
 
       try {
-        const updated = await api.updatePostDate(postId, newDate.toISOString(), post.updated_at);
+        const updated = await api.updatePostDate(postId, newDate.toISOString());
         post.published_at = updated.published_at;
         post.updated_at = updated.updated_at;
         posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
@@ -404,7 +437,8 @@ function renderCalendar() {
     if (isToday) label = ' (сегодня)';
     else if (isYesterday) label = ' (вчера)';
 
-    const dayClass = `timeline-day${isToday ? ' timeline-today' : ''}${dayPosts.length > 0 ? ' has-posts' : ''}`;
+    const isPast = date.toDateString() !== today.toDateString() && date < today;
+    const dayClass = `timeline-day${isToday ? ' timeline-today' : ''}${isPast ? ' timeline-past' : ''}${dayPosts.length > 0 ? ' has-posts' : ''}`;
 
     const postsHtml = dayPosts.map(post => {
       const time = formatTime(new Date(post.published_at));
@@ -415,7 +449,7 @@ function renderCalendar() {
       return `
         <div class="timeline-post ${isScheduled ? 'draggable' : ''}"
              data-id="${escapeHtml(String(post.id))}"
-             data-status="${post.status}"
+             data-status="${escapeHtml(post.status)}"
              data-updated-at="${escapeHtml(post.updated_at)}"
              ${isScheduled ? 'draggable="true"' : ''}>
           <span class="timeline-post-time">${time}</span>
@@ -495,11 +529,11 @@ function setupTimelineDragAndDrop() {
       if (!post) return;
 
       const oldDate = new Date(post.published_at);
-      const newDate = new Date(targetDate);
-      newDate.setHours(oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
+      const [year, mon, day] = targetDate.split('-').map(Number);
+      const newDate = new Date(year, mon - 1, day, oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
 
       try {
-        const updated = await api.updatePostDate(postId, newDate.toISOString(), post.updated_at);
+        const updated = await api.updatePostDate(postId, newDate.toISOString());
         post.published_at = updated.published_at;
         post.updated_at = updated.updated_at;
         posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
@@ -514,6 +548,7 @@ function setupTimelineDragAndDrop() {
 
 // Открыть редактор поста
 function openEditor(postId) {
+  if (!postId || !/^[a-f0-9]{24}$/.test(postId)) return;
   const url = `${blogUrl}/ghost/#/editor/post/${postId}`;
   chrome.tabs.create({ url });
 }
@@ -542,8 +577,9 @@ function formatTime(date) {
 
 // Экранирование HTML
 function escapeHtml(text) {
+  if (text == null) return '';
   const div = document.createElement('div');
-  div.textContent = text;
+  div.textContent = String(text);
   return div.innerHTML;
 }
 

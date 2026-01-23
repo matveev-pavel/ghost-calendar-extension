@@ -2,16 +2,25 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 let GhostAPI;
 beforeEach(async () => {
-  globalThis.fetch = vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => ({
-      posts: [{
-        id: '1',
-        published_at: '2026-01-25T10:00:00Z',
-        updated_at: '2026-01-23T12:00:00Z'
-      }]
+  globalThis.fetch = vi.fn()
+    // Первый вызов — GET updated_at
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }]
+      })
     })
-  });
+    // Второй вызов — PUT
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        posts: [{
+          id: 'post-1',
+          published_at: '2026-01-25T10:00:00Z',
+          updated_at: '2026-01-25T10:00:01Z'
+        }]
+      })
+    });
 
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
   const module = { exports: {} };
@@ -21,17 +30,22 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.updatePostDate()', () => {
-  it('отправляет PUT с published_at и updated_at', async () => {
+  it('получает актуальный updated_at и отправляет PUT с published_at', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;
 
-    const result = await api.updatePostDate('post-1', '2026-01-25T10:00:00Z', '2026-01-23T09:00:00Z');
+    const result = await api.updatePostDate('post-1', '2026-01-25T10:00:00Z');
 
     expect(result.published_at).toBe('2026-01-25T10:00:00Z');
 
-    const [url, opts] = fetch.mock.calls[0];
-    expect(url).toContain('/posts/post-1/');
+    // Первый запрос — GET updated_at
+    const [getUrl] = fetch.mock.calls[0];
+    expect(getUrl).toContain('/posts/post-1/?fields=id,updated_at');
+
+    // Второй запрос — PUT
+    const [putUrl, opts] = fetch.mock.calls[1];
+    expect(putUrl).toContain('/posts/post-1/');
     expect(opts.method).toBe('PUT');
     const body = JSON.parse(opts.body);
     expect(body.posts[0].published_at).toBe('2026-01-25T10:00:00Z');
