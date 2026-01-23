@@ -230,6 +230,127 @@ body {
   color: #30cf43;
 }
 
+/* Drag Handle */
+.drag-handle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  color: #a0a0a0;
+  cursor: grab;
+  font-size: 14px;
+  flex-shrink: 0;
+  user-select: none;
+  align-self: center;
+}
+
+.post-item.draggable:hover .drag-handle {
+  display: flex;
+}
+
+.post-item.dragging {
+  opacity: 0.5;
+  border-color: #30cf43;
+}
+
+.date-group.drag-over {
+  background: #f0fdf0;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #30cf43;
+}
+
+/* Post Meta */
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-status {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.post-status.status-scheduled {
+  color: #30cf43;
+}
+
+.post-status.status-published {
+  color: #a0a0a0;
+}
+
+/* Tags */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 6px;
+  background: #f4f5f6;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #394047;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.tag-chip:hover {
+  background: #e6e6e6;
+}
+
+.tag-remove {
+  display: none;
+  margin-left: 2px;
+  cursor: pointer;
+  color: #a0a0a0;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.tag-chip:hover .tag-remove {
+  display: inline;
+}
+
+.tag-remove:hover {
+  color: #ef4444;
+}
+
+.tag-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: #f4f5f6;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tag-add:hover {
+  background: #e6e6e6;
+  color: #15171a;
+}
+
+.tag-input {
+  border: 1px solid #30cf43;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 11px;
+  outline: none;
+  width: 80px;
+  font-family: inherit;
+}
+
 /* Calendar View */
 .calendar-view {
   flex: 1;
