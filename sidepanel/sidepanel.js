@@ -1,8 +1,10 @@
 // Состояние приложения
 let posts = [];
+let allTags = [];
 let currentView = 'list';
 let currentMonth = new Date();
 let blogUrl = '';
+let api = null;
 
 // DOM элементы
 const loadingState = document.getElementById('loading-state');
@@ -87,16 +89,32 @@ async function loadPosts() {
   showState('loading');
 
   try {
-    const api = await createAPIFromStorage();
+    api = await createAPIFromStorage();
     blogUrl = api.blogUrl;
-    posts = await api.getScheduledPosts();
+
+    const [scheduled, published, tags] = await Promise.all([
+      api.getScheduledPosts(),
+      api.getPublishedPosts(),
+      api.getAllTags()
+    ]);
+
+    // Объединяем и сортируем по дате
+    posts = [...published, ...scheduled].sort(
+      (a, b) => new Date(a.published_at) - new Date(b.published_at)
+    );
+    allTags = tags;
+
+    // Заполнить datalist для автодополнения тегов
+    const datalist = document.getElementById('tags-datalist');
+    if (datalist) {
+      datalist.innerHTML = allTags.map(t => `<option value="${escapeHtml(t.name)}">`).join('');
+    }
 
     if (posts.length === 0) {
       showState('empty');
       return;
     }
 
-    // Загружаем предпочтительный вид
     const { preferredView } = await chrome.storage.local.get(['preferredView']);
     if (preferredView) {
       currentView = preferredView;
@@ -143,13 +161,13 @@ function renderList() {
     const postsHtml = group.posts.map(post => {
       const time = formatTime(new Date(post.published_at));
       const imageHtml = post.feature_image
-        ? `<img class="post-image" src="${post.feature_image}" alt="">`
+        ? `<img class="post-image" src="${escapeHtml(post.feature_image)}" alt="">`
         : `<div class="post-image post-image-placeholder"></div>`;
       const excerptHtml = post.custom_excerpt
         ? `<span class="post-excerpt">${escapeHtml(post.custom_excerpt)}</span>`
         : '';
       return `
-        <div class="post-item" data-id="${post.id}">
+        <div class="post-item" data-id="${escapeHtml(String(post.id))}">
           ${imageHtml}
           <div class="post-content">
             <span class="post-title">${escapeHtml(post.title)}</span>
