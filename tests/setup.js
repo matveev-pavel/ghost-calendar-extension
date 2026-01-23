@@ -18,13 +18,17 @@ globalThis.chrome = {
   }
 };
 
-// Мок crypto.subtle
-globalThis.crypto = {
-  subtle: {
-    importKey: async () => ({}),
-    sign: async () => new ArrayBuffer(32)
-  }
-};
+// Мок crypto.subtle (используем defineProperty, т.к. в Node crypto — read-only getter)
+Object.defineProperty(globalThis, 'crypto', {
+  value: {
+    subtle: {
+      importKey: async () => ({}),
+      sign: async () => new ArrayBuffer(32)
+    }
+  },
+  writable: true,
+  configurable: true
+});
 
 // Мок fetch
 globalThis.fetch = async (url, opts) => ({
