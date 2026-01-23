@@ -516,10 +516,13 @@ function openEditor(postId) {
 // Форматирование даты для заголовка
 function formatDateHeader(date) {
   const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const dateStr = date.toDateString();
+  if (dateStr === yesterday.toDateString()) return 'Вчера';
   if (dateStr === today.toDateString()) return 'Сегодня';
   if (dateStr === tomorrow.toDateString()) return 'Завтра';
 
