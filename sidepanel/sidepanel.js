@@ -13,7 +13,6 @@ const emptyState = document.getElementById('empty-state');
 const listView = document.getElementById('list-view');
 const calendarView = document.getElementById('calendar-view');
 const postsList = document.getElementById('posts-list');
-const calendarDays = document.getElementById('calendar-days');
 const monthTitle = document.getElementById('month-title');
 const errorMessage = document.getElementById('error-message');
 
