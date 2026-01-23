@@ -370,18 +370,16 @@ function setupDragAndDrop() {
 function renderCalendar() {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
+  const timeline = document.getElementById('timeline');
 
   monthTitle.textContent = `${monthNames[month]} ${year}`;
 
-  // Первый день месяца
-  const firstDay = new Date(year, month, 1);
-  // Последний день месяца
   const lastDay = new Date(year, month + 1, 0);
-  // День недели первого дня (0 = Вс, нужно сделать 0 = Пн)
-  let startWeekday = firstDay.getDay() - 1;
-  if (startWeekday < 0) startWeekday = 6;
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
 
-  // Создаём карту постов по дням
+  // Группируем посты по дням этого месяца
   const postsByDay = {};
   posts.forEach(post => {
     const date = new Date(post.published_at);
@@ -392,118 +390,126 @@ function renderCalendar() {
     }
   });
 
-  // Сегодняшняя дата
-  const today = new Date();
-  const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
-  const todayDate = today.getDate();
+  const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
   let html = '';
-
-  // Пустые ячейки до начала месяца
-  for (let i = 0; i < startWeekday; i++) {
-    const prevMonth = new Date(year, month, 0);
-    const day = prevMonth.getDate() - startWeekday + i + 1;
-    html += `<div class="day other-month"><span class="day-number">${day}</span></div>`;
-  }
-
-  // Дни месяца
   for (let day = 1; day <= lastDay.getDate(); day++) {
+    const date = new Date(year, month, day);
+    const dayName = dayNames[date.getDay()];
     const dayPosts = postsByDay[day] || [];
-    const hasPosts = dayPosts.length > 0;
-    const isToday = isCurrentMonth && day === todayDate;
+    const isToday = date.toDateString() === today.toDateString();
+    const isYesterday = date.toDateString() === yesterday.toDateString();
 
-    let classes = 'day';
-    if (isToday) classes += ' today';
-    if (hasPosts) classes += ' has-posts';
+    let label = '';
+    if (isToday) label = ' (сегодня)';
+    else if (isYesterday) label = ' (вчера)';
 
-    const dotsHtml = dayPosts.slice(0, 4).map(() => '<span class="dot"></span>').join('');
+    const dayClass = `timeline-day${isToday ? ' timeline-today' : ''}${dayPosts.length > 0 ? ' has-posts' : ''}`;
+
+    const postsHtml = dayPosts.map(post => {
+      const time = formatTime(new Date(post.published_at));
+      const isScheduled = post.status === 'scheduled';
+      const statusIcon = isScheduled ? '○' : '●';
+      const statusClass = isScheduled ? 'status-scheduled' : 'status-published';
+
+      return `
+        <div class="timeline-post ${isScheduled ? 'draggable' : ''}"
+             data-id="${escapeHtml(String(post.id))}"
+             data-status="${post.status}"
+             data-updated-at="${escapeHtml(post.updated_at)}"
+             ${isScheduled ? 'draggable="true"' : ''}>
+          <span class="timeline-post-time">${time}</span>
+          <span class="timeline-post-status ${statusClass}">${statusIcon}</span>
+          <span class="timeline-post-title">${escapeHtml(post.title)}</span>
+        </div>
+      `;
+    }).join('');
 
     html += `
-      <div class="${classes}" data-day="${day}">
-        <span class="day-number">${day}</span>
-        ${hasPosts ? `<div class="day-dots">${dotsHtml}</div>` : ''}
+      <div class="${dayClass}" data-date="${date.toISOString().split('T')[0]}">
+        <div class="timeline-day-header">
+          <span class="timeline-day-name">${dayName} ${day}${label}</span>
+        </div>
+        <div class="timeline-day-posts">
+          ${postsHtml || '<div class="timeline-empty"></div>'}
+        </div>
       </div>
     `;
   }
 
-  // Пустые ячейки после конца месяца
-  const totalCells = startWeekday + lastDay.getDate();
-  const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-  for (let i = 1; i <= remainingCells; i++) {
-    html += `<div class="day other-month"><span class="day-number">${i}</span></div>`;
+  timeline.innerHTML = html;
+
+  // Клик на пост — открыть редактор
+  timeline.querySelectorAll('.timeline-post').forEach(item => {
+    item.addEventListener('click', () => {
+      openEditor(item.dataset.id);
+    });
+  });
+
+  // Drag & drop в timeline
+  setupTimelineDragAndDrop();
+
+  // Скролл к сегодню
+  const todayEl = timeline.querySelector('.timeline-today');
+  if (todayEl) {
+    todayEl.scrollIntoView({ block: 'center' });
   }
+}
 
-  calendarDays.innerHTML = html;
+function setupTimelineDragAndDrop() {
+  const timeline = document.getElementById('timeline');
 
-  // События на дни с постами
-  calendarDays.querySelectorAll('.day.has-posts').forEach(dayEl => {
-    const day = parseInt(dayEl.dataset.day);
-    const dayPosts = postsByDay[day];
-
-    // Hover для tooltip
-    dayEl.addEventListener('mouseenter', (e) => {
-      showTooltip(e, dayPosts);
+  timeline.querySelectorAll('.timeline-post.draggable').forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.dataset.id);
+      item.classList.add('dragging');
     });
 
-    dayEl.addEventListener('mouseleave', () => {
-      hideTooltip();
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      timeline.querySelectorAll('.timeline-day.drag-over').forEach(d => d.classList.remove('drag-over'));
+    });
+  });
+
+  timeline.querySelectorAll('.timeline-day').forEach(day => {
+    day.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      day.classList.add('drag-over');
     });
 
-    dayEl.addEventListener('mousemove', (e) => {
-      updateTooltipPosition(e);
+    day.addEventListener('dragleave', () => {
+      day.classList.remove('drag-over');
     });
 
-    // Клик открывает первый пост
-    dayEl.addEventListener('click', () => {
-      if (dayPosts.length === 1) {
-        openEditor(dayPosts[0].id);
-      } else {
-        // Показываем список постов этого дня
-        switchView('list');
-        // Скроллим к нужной дате
-        const dateKey = new Date(year, month, day).toISOString().split('T')[0];
-        // Ищем группу
-        setTimeout(() => {
-          const group = postsList.querySelector(`[data-date="${dateKey}"]`);
-          if (group) group.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+    day.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      day.classList.remove('drag-over');
+
+      const postId = e.dataTransfer.getData('text/plain');
+      const targetDate = day.dataset.date;
+      if (!postId || !targetDate) return;
+
+      const post = posts.find(p => String(p.id) === postId);
+      if (!post) return;
+
+      const oldDate = new Date(post.published_at);
+      const newDate = new Date(targetDate);
+      newDate.setHours(oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
+
+      try {
+        const updated = await api.updatePostDate(postId, newDate.toISOString(), post.updated_at);
+        post.published_at = updated.published_at;
+        post.updated_at = updated.updated_at;
+        posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
+        renderCalendar();
+        renderList();
+      } catch (err) {
+        console.error('Ошибка обновления даты:', err);
       }
     });
   });
-}
-
-// Показать tooltip
-function showTooltip(e, dayPosts) {
-  const content = dayPosts.map(post => {
-    const time = formatTime(new Date(post.published_at));
-    return `<div class="tooltip-item">
-      <div class="tooltip-title">${escapeHtml(post.title)}</div>
-      <div class="tooltip-time">${time}</div>
-    </div>`;
-  }).join('');
-
-  tooltip.innerHTML = content;
-  tooltip.classList.add('visible');
-  updateTooltipPosition(e);
-}
-
-// Обновить позицию tooltip
-function updateTooltipPosition(e) {
-  const x = e.clientX + 10;
-  const y = e.clientY + 10;
-
-  // Проверяем, не выходит ли за границы
-  const rect = tooltip.getBoundingClientRect();
-  const maxX = window.innerWidth - rect.width - 10;
-  const maxY = window.innerHeight - rect.height - 10;
-
-  tooltip.style.left = `${Math.min(x, maxX)}px`;
-  tooltip.style.top = `${Math.min(y, maxY)}px`;
-}
-
-// Скрыть tooltip
-function hideTooltip() {
-  tooltip.classList.remove('visible');
 }
 
 // Открыть редактор поста
