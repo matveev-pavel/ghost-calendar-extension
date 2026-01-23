@@ -304,6 +304,69 @@ function setupTagListeners() {
   });
 }
 
+function setupDragAndDrop() {
+  let draggedPostId = null;
+
+  postsList.querySelectorAll('.post-item.draggable').forEach(item => {
+    const handle = item.querySelector('.drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('dragstart', (e) => {
+      draggedPostId = item.dataset.id;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.dataset.id);
+    });
+
+    handle.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      document.querySelectorAll('.date-group.drag-over').forEach(z => z.classList.remove('drag-over'));
+      draggedPostId = null;
+    });
+  });
+
+  // Дропзоны — группы дат
+  postsList.querySelectorAll('.date-group').forEach(group => {
+    group.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      group.classList.add('drag-over');
+    });
+
+    group.addEventListener('dragleave', () => {
+      group.classList.remove('drag-over');
+    });
+
+    group.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      group.classList.remove('drag-over');
+
+      const postId = e.dataTransfer.getData('text/plain');
+      const targetDate = group.dataset.date;
+      if (!postId || !targetDate) return;
+
+      const post = posts.find(p => String(p.id) === postId);
+      if (!post) return;
+
+      // Сохраняем время, меняем только дату
+      const oldDate = new Date(post.published_at);
+      const newDate = new Date(targetDate);
+      newDate.setHours(oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
+
+      try {
+        const updated = await api.updatePostDate(postId, newDate.toISOString(), post.updated_at);
+        post.published_at = updated.published_at;
+        post.updated_at = updated.updated_at;
+        posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
+        renderList();
+        renderCalendar();
+      } catch (err) {
+        console.error('Ошибка обновления даты:', err);
+      }
+    });
+  });
+}
+
 // Рендер календаря
 function renderCalendar() {
   const year = currentMonth.getFullYear();
