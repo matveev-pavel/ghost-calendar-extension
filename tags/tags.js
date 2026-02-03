@@ -8,6 +8,8 @@ let deletingTagId = null;
 let deletingTagIds = []; // For bulk delete
 let selectedTags = new Set();
 let api = null;
+let isGenerating = false;
+let generateAbortController = null;
 
 // DOM elements
 const loadingState = document.getElementById('loading-state');
@@ -15,6 +17,14 @@ const errorState = document.getElementById('error-state');
 const emptyState = document.getElementById('empty-state');
 const tagsList = document.getElementById('tags-list');
 const errorMessage = document.getElementById('error-message');
+
+// AI generation elements
+const aiGenerateBtn = document.getElementById('ai-generate-btn');
+const aiHint = document.getElementById('ai-hint');
+const charCounter = document.getElementById('char-counter');
+const descriptionTextarea = document.getElementById('tag-description');
+const replaceModal = document.getElementById('replace-modal');
+const toast = document.getElementById('toast');
 
 // Initialization
 async function init() {
@@ -116,6 +126,27 @@ function setupModalListeners() {
       closeModal();
       closeDeleteModal();
     }
+  });
+
+  // AI generation
+  aiGenerateBtn.addEventListener('click', startAIGeneration);
+
+  // Character counter
+  descriptionTextarea.addEventListener('input', updateCharCounter);
+
+  // Replace modal
+  document.getElementById('replace-modal-close').addEventListener('click', () => {
+    replaceModal.hidden = true;
+  });
+  document.getElementById('replace-cancel').addEventListener('click', () => {
+    replaceModal.hidden = true;
+  });
+  document.getElementById('replace-confirm').addEventListener('click', async () => {
+    replaceModal.hidden = true;
+    await generateDescription();
+  });
+  replaceModal.addEventListener('click', (e) => {
+    if (e.target === replaceModal) replaceModal.hidden = true;
   });
 }
 
@@ -268,6 +299,11 @@ function openCreateModal() {
   document.getElementById('tag-description').value = '';
   document.getElementById('modal-overlay').hidden = false;
   document.getElementById('tag-name').focus();
+
+  // Hide AI for new tags (no posts yet)
+  aiGenerateBtn.hidden = true;
+  aiHint.hidden = true;
+  updateCharCounter();
 }
 
 function openEditModal(tagId) {
@@ -281,9 +317,14 @@ function openEditModal(tagId) {
   document.getElementById('tag-description').value = tag.description || '';
   document.getElementById('modal-overlay').hidden = false;
   document.getElementById('tag-name').focus();
+
+  // Check AI availability
+  checkAIAvailability(tagId);
+  updateCharCounter();
 }
 
 function closeModal() {
+  abortGeneration();
   document.getElementById('modal-overlay').hidden = true;
   editingTagId = null;
 }
@@ -454,6 +495,138 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = String(text);
   return div.innerHTML;
+}
+
+// Show toast notification
+function showToast(message, type = 'info', actionBtn = null) {
+  toast.className = `toast ${type}`;
+  toast.innerHTML = message;
+
+  if (actionBtn) {
+    const btn = document.createElement('button');
+    btn.className = 'toast-btn';
+    btn.textContent = actionBtn.text;
+    btn.onclick = actionBtn.onClick;
+    toast.appendChild(btn);
+  }
+
+  toast.hidden = false;
+
+  setTimeout(() => {
+    toast.hidden = true;
+  }, 5000);
+}
+
+// Update character counter
+function updateCharCounter() {
+  const length = descriptionTextarea.value.length;
+  charCounter.textContent = `${length} / 500`;
+  charCounter.classList.toggle('warning', length > 500);
+}
+
+// Check if AI generation is available for tag
+async function checkAIAvailability(tagId) {
+  const settings = await getOpenRouterSettings();
+  const tag = tags.find(t => t.id === tagId);
+  const postCount = tag?.count?.posts || 0;
+
+  const hasApiKey = !!settings.apiKey;
+  const hasEnoughPosts = postCount >= 2;
+
+  aiGenerateBtn.hidden = !hasApiKey || !hasEnoughPosts;
+  aiHint.hidden = hasApiKey && hasEnoughPosts;
+
+  if (!hasApiKey) {
+    aiHint.textContent = t('errApiKeyNotConfigured');
+    aiHint.hidden = false;
+  } else if (!hasEnoughPosts) {
+    aiHint.textContent = t('aiMinPostsRequired');
+    aiHint.hidden = false;
+  }
+}
+
+// Start AI generation
+async function startAIGeneration() {
+  if (isGenerating) return;
+
+  const settings = await getOpenRouterSettings();
+
+  if (!settings.apiKey) {
+    showToast(t('errApiKeyNotConfigured'), 'error', {
+      text: t('btnOpenSettings'),
+      onClick: () => chrome.runtime.openOptionsPage()
+    });
+    return;
+  }
+
+  // Check for existing description
+  if (descriptionTextarea.value.trim()) {
+    replaceModal.hidden = false;
+    return;
+  }
+
+  await generateDescription();
+}
+
+// Generate description with AI
+async function generateDescription() {
+  if (isGenerating) return;
+
+  isGenerating = true;
+  generateAbortController = new AbortController();
+
+  // Update UI
+  aiGenerateBtn.innerHTML = '<div class="spinner-small"></div>';
+  aiGenerateBtn.classList.add('loading');
+  descriptionTextarea.value = '';
+  updateCharCounter();
+
+  try {
+    const settings = await getOpenRouterSettings();
+    const tag = tags.find(t => t.id === editingTagId);
+
+    // Get posts for context
+    const posts = await api.getPostsByTag(editingTagId, { limit: 10 });
+    const postsContext = posts.map(p => ({
+      title: p.title,
+      description: p.meta_description || p.custom_excerpt || ''
+    }));
+
+    const openrouter = new OpenRouterAPI(settings.apiKey);
+
+    await openrouter.generateDescription({
+      model: settings.model,
+      tagName: tag.name,
+      posts: postsContext,
+      language: settings.language,
+      customPrompt: settings.customPrompt,
+      signal: generateAbortController.signal,
+      onChunk: (chunk, fullText) => {
+        descriptionTextarea.value = fullText;
+        updateCharCounter();
+      }
+    });
+
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      showToast(t('aiGenerationInterrupted'), 'info');
+    } else {
+      console.error('Generation error:', error);
+      showToast(t('errGenerationFailed', [error.message]), 'error');
+    }
+  } finally {
+    isGenerating = false;
+    generateAbortController = null;
+    aiGenerateBtn.innerHTML = '✨';
+    aiGenerateBtn.classList.remove('loading');
+  }
+}
+
+// Abort generation
+function abortGeneration() {
+  if (generateAbortController) {
+    generateAbortController.abort();
+  }
 }
 
 // Start
