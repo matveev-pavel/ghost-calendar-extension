@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Management - Ghost Calendar</title>
+  <link rel="stylesheet" href="tags.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <button class="back-btn" id="back-btn" title="Back to calendar">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+          </svg>
+        </button>
+        <h1>Tag Management</h1>
+      </div>
+      <button class="primary-btn" id="new-tag-btn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z"/>
+        </svg>
+        New Tag
+      </button>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="public">Public Tags</button>
+      <button class="tab-btn" data-tab="internal">Internal Tags (#)</button>
+    </div>
+
+    <!-- Loading state -->
+    <div class="state loading" id="loading-state">
+      <div class="spinner"></div>
+      <p>Loading tags...</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="state error" id="error-state" style="display: none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="#ef4444">
+        <path d="M24 4C12.96 4 4 12.96 4 24s8.96 20 20 20 20-8.96 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"/>
+      </svg>
+      <p id="error-message">Loading error</p>
+      <button class="retry-btn" id="retry-btn">Retry</button>
+    </div>
+
+    <!-- Empty state -->
+    <div class="state empty" id="empty-state" style="display: none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="#9ca3af">
+        <path d="M8 8a4 4 0 014-4h18.344a4 4 0 012.828 1.172l9.656 9.656A4 4 0 0144 17.656V40a4 4 0 01-4 4H12a4 4 0 01-4-4V8zm22 0v10h10L30 8z"/>
+      </svg>
+      <p>No tags found</p>
+      <button class="primary-btn" id="create-first-tag">Create First Tag</button>
+    </div>
+
+    <!-- Tags list -->
+    <div class="tags-list" id="tags-list" style="display: none;"></div>
+
+    <!-- Edit/Create Modal -->
+    <div class="modal-overlay" id="modal-overlay" hidden>
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="modal-title">New Tag</h2>
+          <button class="modal-close" id="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="tag-name">Name</label>
+            <input type="text" id="tag-name" placeholder="Tag name">
+            <p class="form-hint">Internal tags start with # (e.g., #featured)</p>
+          </div>
+          <div class="form-group">
+            <label for="tag-slug">Slug</label>
+            <input type="text" id="tag-slug" placeholder="tag-slug">
+            <p class="form-hint">URL-friendly version (auto-generated)</p>
+          </div>
+          <div class="form-group">
+            <label for="tag-description">Description</label>
+            <textarea id="tag-description" rows="3" placeholder="Optional description..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-btn" id="modal-cancel">Cancel</button>
+          <button class="primary-btn" id="modal-save">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal" hidden>
+      <div class="modal modal-small">
+        <div class="modal-header">
+          <h2>Delete Tag</h2>
+          <button class="modal-close" id="delete-modal-close">×</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete <strong id="delete-tag-name"></strong>?</p>
+          <p class="warning-text">This will remove the tag from all posts.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-btn" id="delete-cancel">Cancel</button>
+          <button class="danger-btn" id="delete-confirm">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../lib/api.js"></script>
+  <script src="../lib/analytics.js"></script>
+  <script src="tags.js"></script>
+</body>
+</html>
