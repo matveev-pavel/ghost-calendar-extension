@@ -546,5 +546,121 @@
   "btnEdit": {
     "message": "Edit",
     "description": "Edit button title"
+  },
+  "aiSettingsTitle": {
+    "message": "AI Settings (OpenRouter)",
+    "description": "AI settings section title"
+  },
+  "labelOpenRouterKey": {
+    "message": "OpenRouter API Key",
+    "description": "OpenRouter API key label"
+  },
+  "placeholderOpenRouterKey": {
+    "message": "sk-or-v1-...",
+    "description": "OpenRouter API key placeholder"
+  },
+  "hintOpenRouterKey": {
+    "message": "Get your key at",
+    "description": "OpenRouter key hint"
+  },
+  "labelModelFilter": {
+    "message": "Model Filter",
+    "description": "Model filter label"
+  },
+  "filterRecommended": {
+    "message": "Recommended",
+    "description": "Recommended models filter"
+  },
+  "filterFree": {
+    "message": "Free",
+    "description": "Free models filter"
+  },
+  "filterAll": {
+    "message": "All",
+    "description": "All models filter"
+  },
+  "labelModel": {
+    "message": "Model",
+    "description": "Model select label"
+  },
+  "labelGenerationLanguage": {
+    "message": "Generation Language",
+    "description": "Generation language label"
+  },
+  "labelCustomPrompt": {
+    "message": "Custom Prompt (optional)",
+    "description": "Custom prompt label"
+  },
+  "placeholderCustomPrompt": {
+    "message": "Additional instructions for AI generation...",
+    "description": "Custom prompt placeholder"
+  },
+  "hintCustomPrompt": {
+    "message": "Adjust tone and style of generated descriptions",
+    "description": "Custom prompt hint"
+  },
+  "errOpenRouterKeyRequired": {
+    "message": "OpenRouter API key required for this filter",
+    "description": "OpenRouter key required error"
+  },
+  "aiGenerateDescription": {
+    "message": "Generate description with AI",
+    "description": "Generate button tooltip"
+  },
+  "aiMinPostsRequired": {
+    "message": "Minimum 2 posts required for AI generation",
+    "description": "Minimum posts hint"
+  },
+  "aiReplaceConfirm": {
+    "message": "Replace existing description?",
+    "description": "Replace confirmation title"
+  },
+  "aiReplaceMessage": {
+    "message": "The current description will be replaced with AI-generated text.",
+    "description": "Replace confirmation message"
+  },
+  "btnReplace": {
+    "message": "Replace",
+    "description": "Replace button"
+  },
+  "aiGenerating": {
+    "message": "Generating...",
+    "description": "Generating status"
+  },
+  "errApiKeyNotConfigured": {
+    "message": "API key not configured",
+    "description": "API key not configured error"
+  },
+  "errGenerationFailed": {
+    "message": "Generation failed: $ERROR$",
+    "description": "Generation error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "aiGenerationInterrupted": {
+    "message": "Generation interrupted",
+    "description": "Generation interrupted message"
+  },
+  "btnOpenSettings": {
+    "message": "Open Settings",
+    "description": "Open settings button"
+  },
+  "charCounter": {
+    "message": "$CURRENT$ / $MAX$",
+    "description": "Character counter",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "342"
+      },
+      "max": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
   }
 }

@@ -546,5 +546,121 @@
   "btnEdit": {
     "message": "Редактировать",
     "description": "Edit button title"
+  },
+  "aiSettingsTitle": {
+    "message": "Настройки ИИ (OpenRouter)",
+    "description": "AI settings section title"
+  },
+  "labelOpenRouterKey": {
+    "message": "API-ключ OpenRouter",
+    "description": "OpenRouter API key label"
+  },
+  "placeholderOpenRouterKey": {
+    "message": "sk-or-v1-...",
+    "description": "OpenRouter API key placeholder"
+  },
+  "hintOpenRouterKey": {
+    "message": "Получите ключ на",
+    "description": "OpenRouter key hint"
+  },
+  "labelModelFilter": {
+    "message": "Фильтр моделей",
+    "description": "Model filter label"
+  },
+  "filterRecommended": {
+    "message": "Рекомендованные",
+    "description": "Recommended models filter"
+  },
+  "filterFree": {
+    "message": "Бесплатные",
+    "description": "Free models filter"
+  },
+  "filterAll": {
+    "message": "Все",
+    "description": "All models filter"
+  },
+  "labelModel": {
+    "message": "Модель",
+    "description": "Model select label"
+  },
+  "labelGenerationLanguage": {
+    "message": "Язык генерации",
+    "description": "Generation language label"
+  },
+  "labelCustomPrompt": {
+    "message": "Пользовательский промпт (опционально)",
+    "description": "Custom prompt label"
+  },
+  "placeholderCustomPrompt": {
+    "message": "Дополнительные инструкции для ИИ...",
+    "description": "Custom prompt placeholder"
+  },
+  "hintCustomPrompt": {
+    "message": "Настройте тон и стиль генерируемых описаний",
+    "description": "Custom prompt hint"
+  },
+  "errOpenRouterKeyRequired": {
+    "message": "Для этого фильтра требуется API-ключ OpenRouter",
+    "description": "OpenRouter key required error"
+  },
+  "aiGenerateDescription": {
+    "message": "Сгенерировать описание с помощью ИИ",
+    "description": "Generate button tooltip"
+  },
+  "aiMinPostsRequired": {
+    "message": "Для генерации ИИ требуется минимум 2 записи",
+    "description": "Minimum posts hint"
+  },
+  "aiReplaceConfirm": {
+    "message": "Заменить существующее описание?",
+    "description": "Replace confirmation title"
+  },
+  "aiReplaceMessage": {
+    "message": "Текущее описание будет заменено на сгенерированное ИИ.",
+    "description": "Replace confirmation message"
+  },
+  "btnReplace": {
+    "message": "Заменить",
+    "description": "Replace button"
+  },
+  "aiGenerating": {
+    "message": "Генерация...",
+    "description": "Generating status"
+  },
+  "errApiKeyNotConfigured": {
+    "message": "API-ключ не настроен",
+    "description": "API key not configured error"
+  },
+  "errGenerationFailed": {
+    "message": "Ошибка генерации: $ERROR$",
+    "description": "Generation error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "aiGenerationInterrupted": {
+    "message": "Генерация прервана",
+    "description": "Generation interrupted message"
+  },
+  "btnOpenSettings": {
+    "message": "Открыть настройки",
+    "description": "Open settings button"
+  },
+  "charCounter": {
+    "message": "$CURRENT$ / $MAX$",
+    "description": "Character counter",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "342"
+      },
+      "max": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
   }
 }
