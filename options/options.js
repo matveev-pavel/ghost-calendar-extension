@@ -4,6 +4,7 @@ const apiKeyInput = document.getElementById('api-key');
 const testBtn = document.getElementById('test-btn');
 const statusDiv = document.getElementById('status');
 const openIntegrationsLink = document.getElementById('open-integrations');
+const languageSelect = document.getElementById('language');
 
 // Инициализация аналитики
 analytics.init().then(() => {
@@ -13,29 +14,32 @@ analytics.init().then(() => {
 // Blog URL validation
 function validateBlogUrl(url) {
   if (!url) {
-    throw new Error('Blog URL is not specified');
+    throw new Error(t('errBlogUrlRequired'));
   }
 
   try {
     const parsed = new URL(url);
     if (parsed.protocol !== 'https:') {
-      throw new Error('URL must use HTTPS for secure connection');
+      throw new Error(t('errHttpsRequired'));
     }
     // Return normalized origin without trailing slash
     return parsed.origin;
   } catch (e) {
-    if (e.message.includes('HTTPS')) {
+    if (e.message === t('errHttpsRequired')) {
       throw e;
     }
-    throw new Error('Invalid blog URL format');
+    throw new Error(t('errInvalidUrl'));
   }
 }
 
 // Load saved settings
 async function loadSettings() {
-  const { blogUrl, apiKey } = await chrome.storage.local.get(['blogUrl', 'apiKey']);
+  const { blogUrl, apiKey, language } = await chrome.storage.local.get(['blogUrl', 'apiKey', 'language']);
   if (blogUrl) blogUrlInput.value = blogUrl;
   if (apiKey) apiKeyInput.value = apiKey;
+  if (language) languageSelect.value = language;
+
+  applyTranslations();
 }
 
 // Show status
@@ -53,16 +57,16 @@ function hideStatus() {
 async function generateToken(apiKey) {
   const [id, secret] = apiKey.split(':');
   if (!id || !secret) {
-    throw new Error('Invalid API key format');
+    throw new Error(t('errInvalidApiKey'));
   }
 
   // Validate hex format of secret
   if (!/^[a-f0-9]+$/i.test(secret)) {
-    throw new Error('Invalid secret format. Secret must be in hex format');
+    throw new Error(t('errInvalidSecret'));
   }
 
   if (secret.length % 2 !== 0) {
-    throw new Error('Invalid secret length. Length must be even');
+    throw new Error(t('errInvalidSecretLength'));
   }
 
   // Decode hex secret to bytes
@@ -109,7 +113,7 @@ async function testConnection() {
   const apiKey = apiKeyInput.value.trim();
 
   if (!blogUrlInput.value.trim() || !apiKey) {
-    showStatus('Please fill in all fields', 'error');
+    showStatus(t('errFillAllFields'), 'error');
     return false;
   }
 
@@ -121,7 +125,7 @@ async function testConnection() {
     return false;
   }
 
-  showStatus('Testing connection...', 'loading');
+  showStatus(t('msgTesting'), 'loading');
 
   try {
     const token = await generateToken(apiKey);
@@ -138,7 +142,7 @@ async function testConnection() {
     }
 
     const data = await response.json();
-    showStatus(`Connected! Posts found: ${data.meta?.pagination?.total || 0}`, 'success');
+    showStatus(t('msgConnected', [String(data.meta?.pagination?.total || 0)]), 'success');
 
     // Analytics: успешное тестирование соединения
     analytics.trackConnectionTest(true);
@@ -160,7 +164,7 @@ async function saveSettings(e) {
   const apiKey = apiKeyInput.value.trim();
 
   if (!blogUrlInput.value.trim() || !apiKey) {
-    showStatus('Please fill in all fields', 'error');
+    showStatus(t('errFillAllFields'), 'error');
     return;
   }
 
@@ -172,16 +176,16 @@ async function saveSettings(e) {
     return;
   }
 
-  showStatus('Saving...', 'loading');
+  showStatus(t('msgSaving'), 'loading');
 
   try {
     await chrome.storage.local.set({ blogUrl, apiKey });
-    showStatus('Settings saved!', 'success');
+    showStatus(t('msgSaved'), 'success');
 
     // Analytics: сохранение настроек
     analytics.trackSettingsSave();
   } catch (error) {
-    showStatus(`Save error: ${error.message}`, 'error');
+    showStatus(t('msgSaveError', [error.message]), 'error');
     analytics.trackError('settings_save', error.message);
   }
 }
@@ -193,7 +197,7 @@ function openIntegrations(e) {
     const blogUrl = validateBlogUrl(blogUrlInput.value.trim());
     chrome.tabs.create({ url: `${blogUrl}/ghost/#/settings/integrations` });
   } catch (err) {
-    showStatus(err.message || 'Please enter blog URL first', 'error');
+    showStatus(t('errEnterBlogUrl'), 'error');
   }
 }
 
@@ -201,6 +205,12 @@ function openIntegrations(e) {
 form.addEventListener('submit', saveSettings);
 testBtn.addEventListener('click', testConnection);
 openIntegrationsLink.addEventListener('click', openIntegrations);
+
+languageSelect.addEventListener('change', async () => {
+  const language = languageSelect.value;
+  await chrome.storage.local.set({ language: language || null });
+  showStatus(t('msgLanguageChanged'), 'success');
+});
 
 // Load settings on page open
 loadSettings();

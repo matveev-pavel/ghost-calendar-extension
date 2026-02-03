@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ghost Calendar - Settings</title>
+  <title data-i18n="optionsTitle">Ghost Calendar - Settings</title>
   <style>
     * {
       box-sizing: border-box;
@@ -77,6 +77,23 @@
 
     input::placeholder {
       color: #a0a0a0;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e6e6e6;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #15171a;
+      background: white;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #a0a0a0;
     }
 
     .hint {
@@ -163,39 +180,58 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Ghost Calendar</h1>
-      <p>Configure connection to your Ghost blog</p>
+      <h1 data-i18n="appTitle">Ghost Calendar</h1>
+      <p data-i18n="optionsSubtitle">Configure connection to your Ghost blog</p>
     </div>
 
     <form id="settings-form">
       <div class="form-group">
-        <label for="blog-url">Blog URL</label>
-        <input
-          type="url"
-          id="blog-url"
-          placeholder="https://blog.example.com"
-          required
-        >
-        <p class="hint">Full URL of your Ghost blog</p>
+        <label for="language" data-i18n="labelLanguage">Language</label>
+        <select id="language">
+          <option value="">🌐 Auto (Browser)</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="zh_CN">🇨🇳 简体中文</option>
+          <option value="pt_BR">🇧🇷 Português</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="it">🇮🇹 Italiano</option>
+        </select>
       </div>
 
       <div class="form-group">
-        <label for="api-key">Admin API Key</label>
+        <label for="blog-url" data-i18n="labelBlogUrl">Blog URL</label>
+        <input
+          type="url"
+          id="blog-url"
+          data-i18n-placeholder="placeholderBlogUrl"
+          placeholder="https://blog.example.com"
+          required
+        >
+        <p class="hint" data-i18n="hintBlogUrl">Full URL of your Ghost blog</p>
+      </div>
+
+      <div class="form-group">
+        <label for="api-key" data-i18n="labelApiKey">Admin API Key</label>
         <input
           type="password"
           id="api-key"
+          data-i18n-placeholder="placeholderApiKey"
           placeholder="xxxxxxxxxxxxxxxxxxxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy"
           required
         >
         <p class="hint">
-          Find in Ghost Admin: Settings → Integrations →
-          <a href="#" id="open-integrations">Add custom integration</a>
+          <span data-i18n="hintApiKey">Find in Ghost Admin: Settings → Integrations →</span>
+          <a href="#" id="open-integrations" data-i18n="hintApiKeyLink">Add custom integration</a>
         </p>
       </div>
 
       <div class="buttons">
-        <button type="button" class="btn-secondary" id="test-btn">Test</button>
-        <button type="submit" class="btn-primary">Save</button>
+        <button type="button" class="btn-secondary" id="test-btn" data-i18n="btnTest">Test</button>
+        <button type="submit" class="btn-primary" data-i18n="btnSave">Save</button>
       </div>
 
       <div class="status" id="status"></div>
@@ -203,6 +239,7 @@
   </div>
 
   <script src="../lib/analytics.js"></script>
+  <script src="../lib/i18n.js"></script>
   <script src="options.js"></script>
 </body>
 </html>
