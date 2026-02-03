@@ -8,7 +8,8 @@ beforeEach(async () => {
       tags: [
         { id: 't1', name: 'ai', slug: 'ai' },
         { id: 't2', name: 'guide', slug: 'guide' }
-      ]
+      ],
+      meta: { pagination: { next: null } }
     })
   });
 
@@ -20,7 +21,7 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.getAllTags()', () => {
-  it('loads all blog tags', async () => {
+  it('loads all blog tags with pagination', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;
@@ -32,19 +33,21 @@ describe('GhostAPI.getAllTags()', () => {
 
     const url = fetch.mock.calls[0][0];
     expect(url).toContain('/tags/');
-    expect(url).toContain('limit=all');
+    expect(url).toContain('limit=100');
+    expect(url).toContain('page=1');
   });
 });
 
 describe('GhostAPI.getTagsWithCount()', () => {
-  it('loads tags with post count', async () => {
+  it('loads tags with post count using pagination', async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
         tags: [
           { id: 't1', name: 'ai', slug: 'ai', count: { posts: 5 } },
           { id: 't2', name: 'guide', slug: 'guide', count: { posts: 3 } }
-        ]
+        ],
+        meta: { pagination: { next: null } }
       })
     });
     globalThis.fetch = mockFetch;
@@ -67,6 +70,7 @@ describe('GhostAPI.getTagsWithCount()', () => {
 
     const url = mockFetch.mock.calls[0][0];
     expect(url).toContain('include=count.posts');
+    expect(url).toContain('limit=100');
   });
 });
 
