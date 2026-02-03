@@ -1,6 +1,7 @@
 // Application state
 let tags = [];
 let currentTab = 'public';
+let searchQuery = '';
 let editingTagId = null;
 let deletingTagId = null;
 let api = null;
@@ -46,6 +47,12 @@ function setupEventListeners() {
 
   // Retry button
   document.getElementById('retry-btn').addEventListener('click', loadTags);
+
+  // Search
+  document.getElementById('tag-search').addEventListener('input', (e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderTags();
+  });
 
   // Modal events
   setupModalListeners();
@@ -140,15 +147,26 @@ function switchTab(tab) {
 }
 
 function renderTags() {
-  const filteredTags = tags.filter(tag => {
+  let filteredTags = tags.filter(tag => {
     const isInternal = tag.name.startsWith('#');
     return currentTab === 'internal' ? isInternal : !isInternal;
   });
 
+  // Apply search filter
+  if (searchQuery) {
+    filteredTags = filteredTags.filter(tag =>
+      tag.name.toLowerCase().includes(searchQuery) ||
+      (tag.slug && tag.slug.toLowerCase().includes(searchQuery))
+    );
+  }
+
   if (filteredTags.length === 0) {
+    const message = searchQuery
+      ? `No tags matching "${escapeHtml(searchQuery)}"`
+      : `No ${currentTab === 'internal' ? 'internal' : 'public'} tags found`;
     tagsList.innerHTML = `
       <div class="state empty" style="border: none;">
-        <p>No ${currentTab === 'internal' ? 'internal' : 'public'} tags found</p>
+        <p>${message}</p>
       </div>
     `;
     return;
