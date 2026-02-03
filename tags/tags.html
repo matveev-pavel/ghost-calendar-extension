@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tag Management - Ghost Calendar</title>
+  <title data-i18n="tagsTitle">Tag Management - Ghost Calendar</title>
   <link rel="stylesheet" href="tags.css">
 </head>
 <body>
@@ -11,36 +11,52 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <button class="back-btn" id="back-btn" title="Back to calendar">
+        <button class="back-btn" id="back-btn" data-i18n-title="btnBackToCalendar" title="Back to calendar">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
           </svg>
         </button>
-        <h1>Tag Management</h1>
+        <h1 data-i18n="tagsTitle">Tag Management</h1>
       </div>
       <button class="primary-btn" id="new-tag-btn">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z"/>
         </svg>
-        New Tag
+        <span data-i18n="btnNewTag">New Tag</span>
       </button>
     </header>
 
     <!-- Search -->
     <div class="search-bar">
-      <input type="text" class="search-input" id="tag-search" placeholder="Search tags...">
+      <input type="text" class="search-input" id="tag-search" data-i18n-placeholder="searchTagsPlaceholder" placeholder="Search tags...">
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" data-tab="public">Public Tags</button>
-      <button class="tab-btn" data-tab="internal">Internal Tags (#)</button>
+      <button class="tab-btn active" data-tab="public" data-i18n="tabPublicTags">Public Tags</button>
+      <button class="tab-btn" data-tab="internal" data-i18n="tabInternalTags">Internal Tags (#)</button>
+    </div>
+
+    <!-- Bulk actions bar -->
+    <div class="bulk-actions" id="bulk-actions" hidden>
+      <label class="checkbox-label">
+        <input type="checkbox" id="select-all">
+        <span data-i18n="selectAll">Select all</span>
+      </label>
+      <span class="selected-count" id="selected-count">0 selected</span>
+      <button class="danger-btn small" id="delete-selected-btn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg>
+        <span data-i18n="btnDeleteSelected">Delete Selected</span>
+      </button>
     </div>
 
     <!-- Loading state -->
     <div class="state loading" id="loading-state">
       <div class="spinner"></div>
-      <p>Loading tags...</p>
+      <p data-i18n="loadingTags">Loading tags...</p>
     </div>
 
     <!-- Error state -->
@@ -49,7 +65,7 @@
         <path d="M24 4C12.96 4 4 12.96 4 24s8.96 20 20 20 20-8.96 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"/>
       </svg>
       <p id="error-message">Loading error</p>
-      <button class="retry-btn" id="retry-btn">Retry</button>
+      <button class="retry-btn" id="retry-btn" data-i18n="btnRetry">Retry</button>
     </div>
 
     <!-- Empty state -->
@@ -57,8 +73,8 @@
       <svg width="48" height="48" viewBox="0 0 48 48" fill="#9ca3af">
         <path d="M8 8a4 4 0 014-4h18.344a4 4 0 012.828 1.172l9.656 9.656A4 4 0 0144 17.656V40a4 4 0 01-4 4H12a4 4 0 01-4-4V8zm22 0v10h10L30 8z"/>
       </svg>
-      <p>No tags found</p>
-      <button class="primary-btn" id="create-first-tag">Create First Tag</button>
+      <p data-i18n="emptyNoTags">No tags found</p>
+      <button class="primary-btn" id="create-first-tag" data-i18n="btnCreateFirstTag">Create First Tag</button>
     </div>
 
     <!-- Tags list -->
@@ -68,28 +84,28 @@
     <div class="modal-overlay" id="modal-overlay" hidden>
       <div class="modal">
         <div class="modal-header">
-          <h2 id="modal-title">New Tag</h2>
+          <h2 id="modal-title" data-i18n="modalNewTag">New Tag</h2>
           <button class="modal-close" id="modal-close">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="tag-name">Name</label>
-            <input type="text" id="tag-name" placeholder="Tag name">
-            <p class="form-hint">Internal tags start with # (e.g., #featured)</p>
+            <label for="tag-name" data-i18n="labelTagName">Name</label>
+            <input type="text" id="tag-name" data-i18n-placeholder="placeholderTagName" placeholder="Tag name">
+            <p class="form-hint" data-i18n="hintTagName">Internal tags start with # (e.g., #featured)</p>
           </div>
           <div class="form-group">
-            <label for="tag-slug">Slug</label>
-            <input type="text" id="tag-slug" placeholder="tag-slug">
-            <p class="form-hint">URL-friendly version (auto-generated)</p>
+            <label for="tag-slug" data-i18n="labelTagSlug">Slug</label>
+            <input type="text" id="tag-slug" data-i18n-placeholder="placeholderTagSlug" placeholder="tag-slug">
+            <p class="form-hint" data-i18n="hintTagSlug">URL-friendly version (auto-generated)</p>
           </div>
           <div class="form-group">
-            <label for="tag-description">Description</label>
-            <textarea id="tag-description" rows="3" placeholder="Optional description..."></textarea>
+            <label for="tag-description" data-i18n="labelTagDescription">Description</label>
+            <textarea id="tag-description" rows="3" data-i18n-placeholder="placeholderTagDescription" placeholder="Optional description..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="secondary-btn" id="modal-cancel">Cancel</button>
-          <button class="primary-btn" id="modal-save">Save</button>
+          <button class="secondary-btn" id="modal-cancel" data-i18n="btnCancel">Cancel</button>
+          <button class="primary-btn" id="modal-save" data-i18n="btnSave">Save</button>
         </div>
       </div>
     </div>
@@ -98,16 +114,16 @@
     <div class="modal-overlay" id="delete-modal" hidden>
       <div class="modal modal-small">
         <div class="modal-header">
-          <h2>Delete Tag</h2>
+          <h2 id="delete-modal-title" data-i18n="modalDeleteTag">Delete Tag</h2>
           <button class="modal-close" id="delete-modal-close">×</button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete <strong id="delete-tag-name"></strong>?</p>
-          <p class="warning-text">This will remove the tag from all posts.</p>
+          <p id="delete-message">Are you sure you want to delete <strong id="delete-tag-name"></strong>?</p>
+          <p class="warning-text" data-i18n="msgDeleteWarning">This will remove the tag(s) from all posts.</p>
         </div>
         <div class="modal-footer">
-          <button class="secondary-btn" id="delete-cancel">Cancel</button>
-          <button class="danger-btn" id="delete-confirm">Delete</button>
+          <button class="secondary-btn" id="delete-cancel" data-i18n="btnCancel">Cancel</button>
+          <button class="danger-btn" id="delete-confirm" data-i18n="btnDelete">Delete</button>
         </div>
       </div>
     </div>
@@ -115,6 +131,7 @@
 
   <script src="../lib/api.js"></script>
   <script src="../lib/analytics.js"></script>
+  <script src="../lib/i18n.js"></script>
   <script src="tags.js"></script>
 </body>
 </html>

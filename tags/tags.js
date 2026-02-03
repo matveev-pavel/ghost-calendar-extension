@@ -5,6 +5,8 @@ let currentTab = 'public';
 let searchQuery = '';
 let editingTagId = null;
 let deletingTagId = null;
+let deletingTagIds = []; // For bulk delete
+let selectedTags = new Set();
 let api = null;
 
 // DOM elements
@@ -16,6 +18,8 @@ const errorMessage = document.getElementById('error-message');
 
 // Initialization
 async function init() {
+  applyTranslations();
+
   try {
     await analytics.init();
     analytics.trackPageView('tags');
@@ -57,6 +61,15 @@ function setupEventListeners() {
   document.getElementById('tag-search').addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase().trim();
     renderTags();
+  });
+
+  // Bulk actions
+  document.getElementById('select-all').addEventListener('change', (e) => {
+    toggleSelectAll(e.target.checked);
+  });
+
+  document.getElementById('delete-selected-btn').addEventListener('click', () => {
+    openBulkDeleteModal();
   });
 
   // Modal events
@@ -134,7 +147,6 @@ async function loadTags() {
     showState('loaded');
     renderTags();
   } catch (error) {
-    console.error('Loading error:', error);
     errorMessage.textContent = error.message;
     showState('error');
     analytics.trackError('tags_load_error', error.message);
@@ -151,7 +163,7 @@ function switchTab(tab) {
   renderTags();
 }
 
-function renderTags() {
+function getFilteredTags() {
   let filteredTags = tags.filter(tag => {
     const isInternal = tag.name.startsWith('#');
     return currentTab === 'internal' ? isInternal : !isInternal;
@@ -165,10 +177,23 @@ function renderTags() {
     );
   }
 
+  return filteredTags.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function renderTags() {
+  const filteredTags = getFilteredTags();
+
+  // Show/hide bulk actions bar
+  const bulkActionsBar = document.getElementById('bulk-actions');
+  bulkActionsBar.hidden = filteredTags.length === 0;
+
+  // Update selection UI
+  updateSelectionUI();
+
   if (filteredTags.length === 0) {
     const message = searchQuery
-      ? `No tags matching "${escapeHtml(searchQuery)}"`
-      : `No ${currentTab === 'internal' ? 'internal' : 'public'} tags found`;
+      ? t('noTagsMatching', [escapeHtml(searchQuery)])
+      : (currentTab === 'internal' ? t('noInternalTags') : t('noPublicTags'));
     tagsList.innerHTML = `
       <div class="state empty" style="border: none;">
         <p>${message}</p>
@@ -177,20 +202,22 @@ function renderTags() {
     return;
   }
 
-  // Sort alphabetically
-  filteredTags.sort((a, b) => a.name.localeCompare(b.name));
-
   tagsList.innerHTML = filteredTags.map(tag => {
     const postCount = tag.count?.posts || 0;
     const isInternal = tag.name.startsWith('#');
+    const isSelected = selectedTags.has(tag.id);
+    const postCountText = postCount === 1 ? t('tagPostCountSingle') : t('tagPostCount', [String(postCount)]);
 
     return `
-      <div class="tag-item" data-id="${escapeHtml(tag.id)}">
+      <div class="tag-item${isSelected ? ' selected' : ''}" data-id="${escapeHtml(tag.id)}">
+        <label class="tag-checkbox">
+          <input type="checkbox" class="tag-select" ${isSelected ? 'checked' : ''}>
+        </label>
         <div class="tag-info">
           <div class="tag-name${isInternal ? ' internal' : ''}">${escapeHtml(tag.name)}</div>
           <div class="tag-slug">${escapeHtml(tag.slug)}</div>
         </div>
-        <div class="tag-count">${postCount} ${postCount === 1 ? 'post' : 'posts'}</div>
+        <div class="tag-count">${postCountText}</div>
         <div class="tag-actions">
           <button class="action-btn edit-btn" title="Edit">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -209,6 +236,13 @@ function renderTags() {
   }).join('');
 
   // Add event listeners
+  tagsList.querySelectorAll('.tag-select').forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      const item = e.target.closest('.tag-item');
+      toggleTagSelection(item.dataset.id, e.target.checked);
+    });
+  });
+
   tagsList.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const item = e.target.closest('.tag-item');
@@ -226,7 +260,7 @@ function renderTags() {
 
 function openCreateModal() {
   editingTagId = null;
-  document.getElementById('modal-title').textContent = 'New Tag';
+  document.getElementById('modal-title').textContent = t('modalNewTag');
   document.getElementById('tag-name').value = '';
   document.getElementById('tag-slug').value = '';
   document.getElementById('tag-description').value = '';
@@ -239,7 +273,7 @@ function openEditModal(tagId) {
   if (!tag) return;
 
   editingTagId = tagId;
-  document.getElementById('modal-title').textContent = 'Edit Tag';
+  document.getElementById('modal-title').textContent = t('modalEditTag');
   document.getElementById('tag-name').value = tag.name;
   document.getElementById('tag-slug').value = tag.slug;
   document.getElementById('tag-description').value = tag.description || '';
@@ -257,13 +291,63 @@ function openDeleteModal(tagId) {
   if (!tag) return;
 
   deletingTagId = tagId;
-  document.getElementById('delete-tag-name').textContent = tag.name;
+  deletingTagIds = [];
+  document.getElementById('delete-modal-title').textContent = t('modalDeleteTag');
+  document.getElementById('delete-message').innerHTML =
+    t('msgDeleteConfirm', [`<strong>${escapeHtml(tag.name)}</strong>`]);
   document.getElementById('delete-modal').hidden = false;
 }
 
 function closeDeleteModal() {
   document.getElementById('delete-modal').hidden = true;
   deletingTagId = null;
+  deletingTagIds = [];
+}
+
+// Selection functions
+function toggleTagSelection(tagId, isSelected) {
+  if (isSelected) {
+    selectedTags.add(tagId);
+  } else {
+    selectedTags.delete(tagId);
+  }
+  updateSelectionUI();
+}
+
+function toggleSelectAll(selectAll) {
+  const filteredTags = getFilteredTags();
+  if (selectAll) {
+    filteredTags.forEach(tag => selectedTags.add(tag.id));
+  } else {
+    filteredTags.forEach(tag => selectedTags.delete(tag.id));
+  }
+  renderTags();
+}
+
+function updateSelectionUI() {
+  const filteredTags = getFilteredTags();
+  const filteredIds = new Set(filteredTags.map(t => t.id));
+  const selectedInView = [...selectedTags].filter(id => filteredIds.has(id)).length;
+
+  document.getElementById('selected-count').textContent = t('selectedCount', [String(selectedInView)]);
+  document.getElementById('delete-selected-btn').disabled = selectedInView === 0;
+
+  const selectAllCheckbox = document.getElementById('select-all');
+  selectAllCheckbox.checked = filteredTags.length > 0 && selectedInView === filteredTags.length;
+  selectAllCheckbox.indeterminate = selectedInView > 0 && selectedInView < filteredTags.length;
+}
+
+function openBulkDeleteModal() {
+  const filteredTags = getFilteredTags();
+  const filteredIds = new Set(filteredTags.map(t => t.id));
+  deletingTagIds = [...selectedTags].filter(id => filteredIds.has(id));
+
+  if (deletingTagIds.length === 0) return;
+
+  document.getElementById('delete-modal-title').textContent = t('modalDeleteTags');
+  document.getElementById('delete-message').innerHTML =
+    t('msgDeleteMultipleConfirm', [`<strong>${deletingTagIds.length}</strong>`]);
+  document.getElementById('delete-modal').hidden = false;
 }
 
 async function saveTag() {
@@ -272,7 +356,7 @@ async function saveTag() {
   const description = document.getElementById('tag-description').value.trim();
 
   if (!name) {
-    alert('Tag name is required');
+    alert(t('errTagNameRequired'));
     return;
   }
 
@@ -292,7 +376,7 @@ async function saveTag() {
     } else {
       const created = await api.createTag(tagData);
       if (!created || !created.id) {
-        throw new Error('Tag was not created - empty response from server');
+        throw new Error(t('errTagNotCreated'));
       }
       tags.push(created);
       analytics.trackTagCreate();
@@ -302,17 +386,51 @@ async function saveTag() {
     renderTags();
   } catch (error) {
     console.error('Save error:', error);
-    alert('Error saving tag: ' + error.message);
+    alert(t('errSavingTag', [error.message]));
     analytics.trackError('tag_save_error', error.message);
   }
 }
 
 async function deleteTag() {
+  // Bulk delete mode
+  if (deletingTagIds.length > 0) {
+    try {
+      const results = await api.deleteTags(deletingTagIds);
+
+      // Remove deleted tags from local state
+      tags = tags.filter(t => !results.deleted.includes(t.id));
+
+      // Clear selection for deleted tags
+      results.deleted.forEach(id => selectedTags.delete(id));
+
+      analytics.trackTagDelete();
+
+      closeDeleteModal();
+
+      if (results.failed.length > 0) {
+        alert(t('msgBulkDeleteResult', [String(results.deleted.length), String(results.failed.length)]));
+      }
+
+      if (tags.length === 0) {
+        showState('empty');
+      } else {
+        renderTags();
+      }
+    } catch (error) {
+      console.error('Bulk delete error:', error);
+      alert(t('errDeletingTags', [error.message]));
+      analytics.trackError('tag_bulk_delete_error', error.message);
+    }
+    return;
+  }
+
+  // Single delete mode
   if (!deletingTagId) return;
 
   try {
     await api.deleteTag(deletingTagId);
     tags = tags.filter(t => t.id !== deletingTagId);
+    selectedTags.delete(deletingTagId);
     analytics.trackTagDelete();
 
     closeDeleteModal();
@@ -324,7 +442,7 @@ async function deleteTag() {
     }
   } catch (error) {
     console.error('Delete error:', error);
-    alert('Error deleting tag: ' + error.message);
+    alert(t('errDeletingTag', [error.message]));
     analytics.trackError('tag_delete_error', error.message);
   }
 }
