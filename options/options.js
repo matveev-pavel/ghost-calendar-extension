@@ -5,65 +5,70 @@ const testBtn = document.getElementById('test-btn');
 const statusDiv = document.getElementById('status');
 const openIntegrationsLink = document.getElementById('open-integrations');
 
-// Валидация URL блога
+// Инициализация аналитики
+analytics.init().then(() => {
+  analytics.trackPageView('options');
+});
+
+// Blog URL validation
 function validateBlogUrl(url) {
   if (!url) {
-    throw new Error('URL блога не указан');
+    throw new Error('Blog URL is not specified');
   }
 
   try {
     const parsed = new URL(url);
     if (parsed.protocol !== 'https:') {
-      throw new Error('URL должен использовать HTTPS для безопасного соединения');
+      throw new Error('URL must use HTTPS for secure connection');
     }
-    // Возвращаем нормализованный origin без trailing slash
+    // Return normalized origin without trailing slash
     return parsed.origin;
   } catch (e) {
     if (e.message.includes('HTTPS')) {
       throw e;
     }
-    throw new Error('Неверный формат URL блога');
+    throw new Error('Invalid blog URL format');
   }
 }
 
-// Загрузка сохранённых настроек
+// Load saved settings
 async function loadSettings() {
   const { blogUrl, apiKey } = await chrome.storage.local.get(['blogUrl', 'apiKey']);
   if (blogUrl) blogUrlInput.value = blogUrl;
   if (apiKey) apiKeyInput.value = apiKey;
 }
 
-// Показать статус
+// Show status
 function showStatus(message, type) {
   statusDiv.textContent = message;
   statusDiv.className = `status ${type}`;
 }
 
-// Скрыть статус
+// Hide status
 function hideStatus() {
   statusDiv.className = 'status';
 }
 
-// Генерация JWT токена для Ghost Admin API
+// Generate JWT token for Ghost Admin API
 async function generateToken(apiKey) {
   const [id, secret] = apiKey.split(':');
   if (!id || !secret) {
-    throw new Error('Неверный формат API ключа');
+    throw new Error('Invalid API key format');
   }
 
-  // Валидация hex-формата secret
+  // Validate hex format of secret
   if (!/^[a-f0-9]+$/i.test(secret)) {
-    throw new Error('Неверный формат secret. Secret должен быть в hex формате');
+    throw new Error('Invalid secret format. Secret must be in hex format');
   }
 
   if (secret.length % 2 !== 0) {
-    throw new Error('Неверная длина secret. Длина должна быть чётной');
+    throw new Error('Invalid secret length. Length must be even');
   }
 
-  // Декодируем hex secret в байты
+  // Decode hex secret to bytes
   const keyBytes = new Uint8Array(secret.match(/.{2}/g).map(byte => parseInt(byte, 16)));
 
-  // Импортируем ключ для HMAC
+  // Import key for HMAC
   const key = await crypto.subtle.importKey(
     'raw',
     keyBytes,
@@ -72,7 +77,7 @@ async function generateToken(apiKey) {
     ['sign']
   );
 
-  // Создаём header и payload
+  // Create header and payload
   const header = { alg: 'HS256', typ: 'JWT', kid: id };
   const now = Math.floor(Date.now() / 1000);
   const payload = { iat: now, exp: now + 300, aud: '/admin/' };
@@ -88,7 +93,7 @@ async function generateToken(apiKey) {
   const payloadB64 = base64UrlEncode(payload);
   const message = `${headerB64}.${payloadB64}`;
 
-  // Подписываем
+  // Sign
   const encoder = new TextEncoder();
   const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
   const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
@@ -99,12 +104,12 @@ async function generateToken(apiKey) {
   return `${message}.${signatureB64}`;
 }
 
-// Тестирование подключения
+// Test connection
 async function testConnection() {
   const apiKey = apiKeyInput.value.trim();
 
   if (!blogUrlInput.value.trim() || !apiKey) {
-    showStatus('Заполните все поля', 'error');
+    showStatus('Please fill in all fields', 'error');
     return false;
   }
 
@@ -116,7 +121,7 @@ async function testConnection() {
     return false;
   }
 
-  showStatus('Проверка подключения...', 'loading');
+  showStatus('Testing connection...', 'loading');
 
   try {
     const token = await generateToken(apiKey);
@@ -133,22 +138,29 @@ async function testConnection() {
     }
 
     const data = await response.json();
-    showStatus(`Подключено! Найдено постов: ${data.meta?.pagination?.total || 0}`, 'success');
+    showStatus(`Connected! Posts found: ${data.meta?.pagination?.total || 0}`, 'success');
+
+    // Analytics: успешное тестирование соединения
+    analytics.trackConnectionTest(true);
     return true;
   } catch (error) {
-    showStatus(`Ошибка: ${error.message}`, 'error');
+    showStatus(`Error: ${error.message}`, 'error');
+
+    // Analytics: неуспешное тестирование соединения
+    analytics.trackConnectionTest(false);
+    analytics.trackError('connection_test', error.message);
     return false;
   }
 }
 
-// Сохранение настроек
+// Save settings
 async function saveSettings(e) {
   e.preventDefault();
 
   const apiKey = apiKeyInput.value.trim();
 
   if (!blogUrlInput.value.trim() || !apiKey) {
-    showStatus('Заполните все поля', 'error');
+    showStatus('Please fill in all fields', 'error');
     return;
   }
 
@@ -160,31 +172,35 @@ async function saveSettings(e) {
     return;
   }
 
-  showStatus('Сохранение...', 'loading');
+  showStatus('Saving...', 'loading');
 
   try {
     await chrome.storage.local.set({ blogUrl, apiKey });
-    showStatus('Настройки сохранены!', 'success');
+    showStatus('Settings saved!', 'success');
+
+    // Analytics: сохранение настроек
+    analytics.trackSettingsSave();
   } catch (error) {
-    showStatus(`Ошибка сохранения: ${error.message}`, 'error');
+    showStatus(`Save error: ${error.message}`, 'error');
+    analytics.trackError('settings_save', error.message);
   }
 }
 
-// Открыть страницу интеграций Ghost
+// Open Ghost integrations page
 function openIntegrations(e) {
   e.preventDefault();
   try {
     const blogUrl = validateBlogUrl(blogUrlInput.value.trim());
     chrome.tabs.create({ url: `${blogUrl}/ghost/#/settings/integrations` });
   } catch (err) {
-    showStatus(err.message || 'Сначала введите URL блога', 'error');
+    showStatus(err.message || 'Please enter blog URL first', 'error');
   }
 }
 
-// Обработчики событий
+// Event handlers
 form.addEventListener('submit', saveSettings);
 testBtn.addEventListener('click', testConnection);
 openIntegrationsLink.addEventListener('click', openIntegrations);
 
-// Загрузка настроек при открытии страницы
+// Load settings on page open
 loadSettings();

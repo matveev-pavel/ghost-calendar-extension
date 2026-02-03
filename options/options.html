@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ghost Calendar - Настройки</title>
+  <title>Ghost Calendar - Settings</title>
   <style>
     * {
       box-sizing: border-box;
@@ -164,19 +164,19 @@
   <div class="container">
     <div class="header">
       <h1>Ghost Calendar</h1>
-      <p>Настройте подключение к вашему блогу Ghost</p>
+      <p>Configure connection to your Ghost blog</p>
     </div>
 
     <form id="settings-form">
       <div class="form-group">
-        <label for="blog-url">URL блога</label>
+        <label for="blog-url">Blog URL</label>
         <input
           type="url"
           id="blog-url"
           placeholder="https://blog.example.com"
           required
         >
-        <p class="hint">Полный URL вашего Ghost блога</p>
+        <p class="hint">Full URL of your Ghost blog</p>
       </div>
 
       <div class="form-group">
@@ -188,20 +188,21 @@
           required
         >
         <p class="hint">
-          Найдите в Ghost Admin: Settings → Integrations →
+          Find in Ghost Admin: Settings → Integrations →
           <a href="#" id="open-integrations">Add custom integration</a>
         </p>
       </div>
 
       <div class="buttons">
-        <button type="button" class="btn-secondary" id="test-btn">Проверить</button>
-        <button type="submit" class="btn-primary">Сохранить</button>
+        <button type="button" class="btn-secondary" id="test-btn">Test</button>
+        <button type="submit" class="btn-primary">Save</button>
       </div>
 
       <div class="status" id="status"></div>
     </form>
   </div>
 
+  <script src="../lib/analytics.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

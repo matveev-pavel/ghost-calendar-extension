@@ -1,14 +1,14 @@
-// Открывать Side Panel при клике на иконку расширения
+// Open Side Panel on extension icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
-// Подмена Origin заголовка для PUT-запросов к Ghost API
-// Ghost проверяет Origin на мутирующих запросах (CSRF-защита)
+// Override Origin header for PUT requests to Ghost API
+// Ghost checks Origin on mutating requests (CSRF protection)
 const RULE_ID = 1;
 
 async function updateOriginRule() {
   const { blogUrl } = await chrome.storage.local.get(['blogUrl']);
 
-  // Удаляем старое правило
+  // Remove old rule
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [RULE_ID]
   });
@@ -38,7 +38,7 @@ async function updateOriginRule() {
   });
 }
 
-// Миграция настроек из sync в local (v1 → v2)
+// Migrate settings from sync to local (v1 → v2) и инициализация analytics client_id
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'update') {
     const sync = await chrome.storage.sync.get(['blogUrl', 'apiKey']);
@@ -47,13 +47,20 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.remove(['blogUrl', 'apiKey']);
     }
   }
+
+  // Генерация client_id для аналитики при первой установке
+  if (details.reason === 'install') {
+    const clientId = `${Date.now()}.${Math.random().toString(36).substring(2, 15)}`;
+    await chrome.storage.local.set({ analyticsClientId: clientId });
+  }
+
   updateOriginRule();
 });
 
-// Инициализация при старте
+// Initialize on startup
 updateOriginRule();
 
-// Обновление при смене настроек
+// Update on settings change
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'local' && changes.blogUrl) {
     updateOriginRule();

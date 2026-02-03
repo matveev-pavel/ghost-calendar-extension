@@ -1,4 +1,4 @@
-// Состояние приложения
+// Application state
 let posts = [];
 let allTags = [];
 let currentView = 'list';
@@ -6,7 +6,7 @@ let currentMonth = new Date();
 let blogUrl = '';
 let api = null;
 
-// DOM элементы
+// DOM elements
 const loadingState = document.getElementById('loading-state');
 const errorState = document.getElementById('error-state');
 const emptyState = document.getElementById('empty-state');
@@ -16,21 +16,25 @@ const postsList = document.getElementById('posts-list');
 const monthTitle = document.getElementById('month-title');
 const errorMessage = document.getElementById('error-message');
 
-// Названия месяцев
+// Month names
 const monthNames = [
-  'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-// Инициализация
+// Initialization
 async function init() {
+  // Инициализация аналитики
+  await analytics.init();
+  analytics.trackPageView('sidepanel');
+
   setupEventListeners();
   await loadPosts();
 }
 
-// Настройка обработчиков событий
+// Setup event listeners
 function setupEventListeners() {
-  // Переключение вида
+  // View toggle
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const view = btn.dataset.view;
@@ -38,15 +42,15 @@ function setupEventListeners() {
     });
   });
 
-  // Настройки
+  // Settings
   document.getElementById('open-settings').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
   });
 
-  // Повтор загрузки
+  // Retry loading
   document.getElementById('retry-btn').addEventListener('click', loadPosts);
 
-  // Навигация по календарю
+  // Calendar navigation
   document.getElementById('prev-month').addEventListener('click', async () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
     await loadMonthPosts();
@@ -60,7 +64,7 @@ function setupEventListeners() {
   });
 }
 
-// Переключение между видами
+// Switch between views
 function switchView(view) {
   currentView = view;
 
@@ -71,11 +75,14 @@ function switchView(view) {
   listView.style.display = view === 'list' ? 'block' : 'none';
   calendarView.style.display = view === 'calendar' ? 'flex' : 'none';
 
-  // Сохраняем выбор
+  // Save preference
   chrome.storage.local.set({ preferredView: view });
+
+  // Analytics: отслеживание переключения вида
+  analytics.trackViewSwitch(view);
 }
 
-// Показ состояния
+// Show state
 function showState(state) {
   loadingState.style.display = state === 'loading' ? 'flex' : 'none';
   errorState.style.display = state === 'error' ? 'flex' : 'none';
@@ -84,7 +91,7 @@ function showState(state) {
   calendarView.style.display = state === 'loaded' && currentView === 'calendar' ? 'flex' : 'none';
 }
 
-// Загрузка постов
+// Load posts
 async function loadPosts() {
   showState('loading');
 
@@ -98,13 +105,13 @@ async function loadPosts() {
       api.getAllTags()
     ]);
 
-    // Объединяем и сортируем по дате
+    // Merge and sort by date
     posts = [...published, ...scheduled].sort(
       (a, b) => new Date(a.published_at) - new Date(b.published_at)
     );
     allTags = tags;
 
-    // Заполнить datalist для автодополнения тегов
+    // Fill datalist for tag autocomplete
     const datalist = document.getElementById('tags-datalist');
     if (datalist) {
       datalist.innerHTML = allTags.map(t => `<option value="${escapeHtml(t.name)}">`).join('');
@@ -127,19 +134,22 @@ async function loadPosts() {
     renderList();
     renderCalendar();
   } catch (error) {
-    console.error('Ошибка загрузки:', error);
+    console.error('Loading error:', error);
     errorMessage.textContent = error.message;
     showState('error');
+
+    // Analytics: отслеживание ошибки загрузки
+    analytics.trackError('load_error', error.message);
   }
 }
 
-// Подгрузка опубликованных постов для выбранного месяца
+// Load published posts for selected month
 async function loadMonthPosts() {
   if (!api) return;
   try {
     const since = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
     const published = await api.getPublishedPosts(since);
-    // Добавляем новые посты, избегая дубликатов
+    // Add new posts, avoiding duplicates
     const existingIds = new Set(posts.map(p => p.id));
     const newPosts = published.filter(p => !existingIds.has(p.id));
     if (newPosts.length > 0) {
@@ -148,15 +158,15 @@ async function loadMonthPosts() {
       );
     }
   } catch (err) {
-    console.error('Ошибка загрузки месяца:', err);
+    console.error('Month loading error:', err);
   }
 }
 
-// Рендер списка
+// Render list
 function renderList() {
   const grouped = {};
 
-  // В списке показываем: все scheduled + published за вчера/сегодня
+  // Show in list: all scheduled + published for yesterday/today
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayKey = yesterday.toISOString().split('T')[0];
@@ -188,7 +198,7 @@ function renderList() {
       const time = formatTime(new Date(post.published_at));
       const isScheduled = post.status === 'scheduled';
       const statusClass = isScheduled ? 'status-scheduled' : 'status-published';
-      const statusText = isScheduled ? 'запланирован' : 'опубликован';
+      const statusText = isScheduled ? 'scheduled' : 'published';
       const dragHandle = isScheduled
         ? '<div class="drag-handle" draggable="true">⠿</div>'
         : '';
@@ -231,7 +241,7 @@ function renderList() {
     `;
   }).join('');
 
-  // Клик на пост — открыть редактор
+  // Click on post — open editor
   postsList.querySelectorAll('.post-item').forEach(item => {
     item.addEventListener('click', (e) => {
       if (e.target.closest('.drag-handle') || e.target.closest('.tag-chip') ||
@@ -254,13 +264,13 @@ function renderPostTags(post) {
   return `
     <div class="post-tags" data-post-id="${escapeHtml(String(post.id))}">
       ${tagsChips}
-      <span class="tag-add" title="Добавить тег">+</span>
+      <span class="tag-add" title="Add tag">+</span>
     </div>
   `;
 }
 
 function setupTagListeners() {
-  // Удаление тега
+  // Remove tag
   postsList.querySelectorAll('.tag-remove').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -278,13 +288,17 @@ function setupTagListeners() {
         post.tags = updated.tags;
         post.updated_at = updated.updated_at;
         chip.remove();
+
+        // Analytics: отслеживание удаления тега
+        analytics.trackTagRemove();
       } catch (err) {
-        console.error('Ошибка удаления тега:', err);
+        console.error('Tag removal error:', err);
+        analytics.trackError('tag_remove_error', err.message);
       }
     });
   });
 
-  // Добавление тега — клик на "+"
+  // Add tag — click on "+"
   postsList.querySelectorAll('.tag-add').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -293,7 +307,7 @@ function setupTagListeners() {
 
       const input = document.createElement('input');
       input.className = 'tag-input';
-      input.placeholder = 'тег...';
+      input.placeholder = 'tag...';
       input.setAttribute('list', 'tags-datalist');
       container.insertBefore(input, btn);
       btn.style.display = 'none';
@@ -315,8 +329,12 @@ function setupTagListeners() {
             const tagsContainer = postEl.querySelector('.post-tags');
             tagsContainer.outerHTML = renderPostTags(post);
             setupTagListeners();
+
+            // Analytics: отслеживание добавления тега
+            analytics.trackTagAdd();
           } catch (err) {
-            console.error('Ошибка добавления тега:', err);
+            console.error('Tag addition error:', err);
+            analytics.trackError('tag_add_error', err.message);
           }
         } else if (ev.key === 'Escape') {
           input.remove();
@@ -357,7 +375,7 @@ function setupDragAndDrop() {
     });
   });
 
-  // Дропзоны — группы дат
+  // Drop zones — date groups
   postsList.querySelectorAll('.date-group').forEach(group => {
     group.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -380,7 +398,7 @@ function setupDragAndDrop() {
       const post = posts.find(p => String(p.id) === postId);
       if (!post) return;
 
-      // Сохраняем время, меняем только дату
+      // Keep time, change only date
       const oldDate = new Date(post.published_at);
       const [year, mon, day] = targetDate.split('-').map(Number);
       const newDate = new Date(year, mon - 1, day, oldDate.getHours(), oldDate.getMinutes(), oldDate.getSeconds());
@@ -392,14 +410,18 @@ function setupDragAndDrop() {
         posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
         renderList();
         renderCalendar();
+
+        // Analytics: отслеживание drag & drop
+        analytics.trackDragDrop();
       } catch (err) {
-        console.error('Ошибка обновления даты:', err);
+        console.error('Date update error:', err);
+        analytics.trackError('drag_drop_error', err.message);
       }
     });
   });
 }
 
-// Рендер календаря
+// Render calendar
 function renderCalendar() {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -412,7 +434,7 @@ function renderCalendar() {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  // Группируем посты по дням этого месяца
+  // Group posts by days of this month
   const postsByDay = {};
   posts.forEach(post => {
     const date = new Date(post.published_at);
@@ -423,7 +445,7 @@ function renderCalendar() {
     }
   });
 
-  const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   let html = '';
   for (let day = 1; day <= lastDay.getDate(); day++) {
@@ -434,8 +456,8 @@ function renderCalendar() {
     const isYesterday = date.toDateString() === yesterday.toDateString();
 
     let label = '';
-    if (isToday) label = ' (сегодня)';
-    else if (isYesterday) label = ' (вчера)';
+    if (isToday) label = ' (today)';
+    else if (isYesterday) label = ' (yesterday)';
 
     const isPast = date.toDateString() !== today.toDateString() && date < today;
     const dayClass = `timeline-day${isToday ? ' timeline-today' : ''}${isPast ? ' timeline-past' : ''}${dayPosts.length > 0 ? ' has-posts' : ''}`;
@@ -473,17 +495,17 @@ function renderCalendar() {
 
   timeline.innerHTML = html;
 
-  // Клик на пост — открыть редактор
+  // Click on post — open editor
   timeline.querySelectorAll('.timeline-post').forEach(item => {
     item.addEventListener('click', () => {
       openEditor(item.dataset.id);
     });
   });
 
-  // Drag & drop в timeline
+  // Drag & drop in timeline
   setupTimelineDragAndDrop();
 
-  // Скролл к сегодню
+  // Scroll to today
   const todayEl = timeline.querySelector('.timeline-today');
   if (todayEl) {
     todayEl.scrollIntoView({ block: 'center' });
@@ -539,21 +561,28 @@ function setupTimelineDragAndDrop() {
         posts.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
         renderCalendar();
         renderList();
+
+        // Analytics: отслеживание drag & drop в timeline
+        analytics.trackDragDrop();
       } catch (err) {
-        console.error('Ошибка обновления даты:', err);
+        console.error('Date update error:', err);
+        analytics.trackError('drag_drop_error', err.message);
       }
     });
   });
 }
 
-// Открыть редактор поста
+// Open post editor
 function openEditor(postId) {
   if (!postId || !/^[a-f0-9]{24}$/.test(postId)) return;
   const url = `${blogUrl}/ghost/#/editor/post/${postId}`;
   chrome.tabs.create({ url });
+
+  // Analytics: отслеживание открытия поста
+  analytics.trackPostOpen();
 }
 
-// Форматирование даты для заголовка
+// Format date for header
 function formatDateHeader(date) {
   const today = new Date();
   const yesterday = new Date(today);
@@ -562,20 +591,20 @@ function formatDateHeader(date) {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const dateStr = date.toDateString();
-  if (dateStr === yesterday.toDateString()) return 'Вчера';
-  if (dateStr === today.toDateString()) return 'Сегодня';
-  if (dateStr === tomorrow.toDateString()) return 'Завтра';
+  if (dateStr === yesterday.toDateString()) return 'Yesterday';
+  if (dateStr === today.toDateString()) return 'Today';
+  if (dateStr === tomorrow.toDateString()) return 'Tomorrow';
 
   const options = { weekday: 'long', day: 'numeric', month: 'long' };
-  return date.toLocaleDateString('ru-RU', options);
+  return date.toLocaleDateString('en-US', options);
 }
 
-// Форматирование времени
+// Format time
 function formatTime(date) {
-  return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
-// Экранирование HTML
+// Escape HTML
 function escapeHtml(text) {
   if (text == null) return '';
   const div = document.createElement('div');
@@ -583,5 +612,5 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Запуск
+// Start
 init();
