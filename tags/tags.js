@@ -1,3 +1,4 @@
+
 // Application state
 let tags = [];
 let currentTab = 'public';
@@ -15,8 +16,12 @@ const errorMessage = document.getElementById('error-message');
 
 // Initialization
 async function init() {
-  await analytics.init();
-  analytics.trackPageView('tags');
+  try {
+    await analytics.init();
+    analytics.trackPageView('tags');
+  } catch (e) {
+    console.warn('Analytics init failed:', e);
+  }
 
   setupEventListeners();
   await loadTags();
@@ -271,7 +276,10 @@ async function saveTag() {
     return;
   }
 
-  const tagData = { name, slug, description };
+  // Only include non-empty fields (Ghost will auto-generate slug if empty)
+  const tagData = { name };
+  if (slug) tagData.slug = slug;
+  if (description) tagData.description = description;
 
   try {
     if (editingTagId) {
@@ -283,6 +291,9 @@ async function saveTag() {
       analytics.trackTagUpdate();
     } else {
       const created = await api.createTag(tagData);
+      if (!created || !created.id) {
+        throw new Error('Tag was not created - empty response from server');
+      }
       tags.push(created);
       analytics.trackTagCreate();
     }
@@ -326,4 +337,4 @@ function escapeHtml(text) {
 }
 
 // Start
-init();
+init().catch(err => console.error('Init failed:', err));
