@@ -636,8 +636,8 @@ async function generateDescription() {
     const settings = await getOpenRouterSettings();
     const tag = tags.find(t => t.id === editingTagId);
 
-    // Get posts for context
-    const posts = await api.getPostsByTag(editingTagId, { limit: 10 });
+    // Get posts for context (Ghost API filters by slug, not ID)
+    const posts = await api.getPostsByTag(tag.slug, { limit: 10 });
     const postsContext = posts.map(p => ({
       title: p.title,
       description: p.meta_description || p.custom_excerpt || ''
