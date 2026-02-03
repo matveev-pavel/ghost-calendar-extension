@@ -3,49 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ghost Calendar</title>
+  <title data-i18n="appTitle">Ghost Calendar</title>
   <link rel="stylesheet" href="sidepanel.css">
 </head>
 <body>
   <div class="container">
     <!-- Header -->
     <header class="header">
-      <h1>Ghost Calendar</h1>
+      <h1 data-i18n="appTitle">Ghost Calendar</h1>
       <div class="header-actions">
         <div class="view-toggle">
-          <button class="toggle-btn active" data-view="list" title="List">
+          <button class="toggle-btn active" data-view="list" data-i18n-title="btnList" title="List">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M2 3h12v2H2V3zm0 4h12v2H2V7zm0 4h12v2H2v-2z"/>
             </svg>
           </button>
-          <button class="toggle-btn" data-view="calendar" title="Calendar">
+          <button class="toggle-btn" data-view="calendar" data-i18n-title="btnCalendar" title="Calendar">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M4 0v1H1a1 1 0 00-1 1v13a1 1 0 001 1h14a1 1 0 001-1V2a1 1 0 00-1-1h-3V0h-2v1H6V0H4zm11 5H1v10h14V5zM3 7h2v2H3V7zm4 0h2v2H7V7zm4 0h2v2h-2V7zM3 11h2v2H3v-2zm4 0h2v2H7v-2z"/>
             </svg>
           </button>
         </div>
-        <button class="settings-btn" id="toggle-selection" title="Select multiple posts">
+        <button class="settings-btn" id="toggle-selection" data-i18n-title="btnSelectMultiple" title="Select multiple posts">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M14 1a1 1 0 011 1v12a1 1 0 01-1 1H2a1 1 0 01-1-1V2a1 1 0 011-1h12zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z"/>
             <path d="M10.97 4.97a.75.75 0 011.071 1.05l-3.992 4.99a.75.75 0 01-1.08.02L4.324 8.384a.75.75 0 111.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 01.02-.022z"/>
           </svg>
         </button>
-        <button class="settings-btn" id="open-tags" title="Manage tags">
+        <button class="settings-btn" id="open-tags" data-i18n-title="btnManageTags" title="Manage tags">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 2a1 1 0 011-1h4.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0l-7-7A1 1 0 012 6.586V2zm3.5 4a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
           </svg>
         </button>
-        <button class="settings-btn" id="toggle-filter" title="Filter by tags">
+        <button class="settings-btn" id="toggle-filter" data-i18n-title="btnFilterByTags" title="Filter by tags">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M6 10.5a.5.5 0 01.5-.5h3a.5.5 0 010 1h-3a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z"/>
           </svg>
         </button>
-        <button class="settings-btn" id="open-feedback" title="Feedback">
+        <button class="settings-btn" id="open-feedback" data-i18n-title="btnFeedback" title="Feedback">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 1a1 1 0 00-1 1v8a1 1 0 001 1h9.586a2 2 0 011.414.586l2 2V2a1 1 0 00-1-1H2zm12-1a2 2 0 012 2v12.793a.5.5 0 01-.854.353l-2.853-2.853a1 1 0 00-.707-.293H2a2 2 0 01-2-2V2a2 2 0 012-2h12z"/>
           </svg>
         </button>
-        <button class="settings-btn" id="open-settings" title="Settings">
+        <button class="settings-btn" id="open-settings" data-i18n-title="btnSettings" title="Settings">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 4.754a3.246 3.246 0 100 6.492 3.246 3.246 0 000-6.492zM5.754 8a2.246 2.246 0 114.492 0 2.246 2.246 0 01-4.492 0z"/>
             <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 01-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 01-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 01.52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 011.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 011.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 01.52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 01-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 01-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 002.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 001.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 00-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 00-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 00-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 001.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 003.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 002.692-1.115l.094-.319z"/>
@@ -57,15 +57,15 @@
     <!-- Filter bar -->
     <div class="filter-bar" id="filter-bar" style="display: none;">
       <div class="filter-chips" id="filter-chips"></div>
-      <button class="filter-add-btn" id="filter-add-btn" title="Add tag filter">+</button>
+      <button class="filter-add-btn" id="filter-add-btn" data-i18n-title="filterAddTag" title="Add tag filter">+</button>
       <div class="filter-mode">
-        <button class="mode-btn" data-mode="OR" title="Match any tag">Any</button>
-        <button class="mode-btn active" data-mode="AND" title="Match all tags">All</button>
+        <button class="mode-btn" data-mode="OR" data-i18n="filterMatchAny" data-i18n-title="filterMatchAnyTitle" title="Match any tag">Any</button>
+        <button class="mode-btn active" data-mode="AND" data-i18n="filterMatchAll" data-i18n-title="filterMatchAllTitle" title="Match all tags">All</button>
       </div>
-      <button class="filter-clear-btn" id="filter-clear-btn" title="Clear filter">Clear</button>
+      <button class="filter-clear-btn" id="filter-clear-btn" data-i18n="filterClear" title="Clear filter">Clear</button>
       <!-- Dropdown inside filter-bar for proper positioning -->
       <div class="filter-dropdown" id="filter-dropdown" hidden>
-        <input type="text" id="filter-search" placeholder="Search tags..." autofocus>
+        <input type="text" id="filter-search" data-i18n-placeholder="filterSearchPlaceholder" placeholder="Search tags..." autofocus>
         <div class="filter-options" id="filter-options"></div>
       </div>
     </div>
@@ -80,22 +80,22 @@
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z"/>
           </svg>
-          Tag
+          <span data-i18n="selectionAddTag">Tag</span>
         </button>
         <button class="selection-btn" id="bulk-remove-tag" title="Remove tag from selected">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2.5 7.5a.5.5 0 010 1h11a.5.5 0 010-1h-11z"/>
           </svg>
-          Tag
+          <span data-i18n="selectionRemoveTag">Tag</span>
         </button>
-        <button class="selection-btn cancel" id="selection-cancel">Cancel</button>
+        <button class="selection-btn cancel" id="selection-cancel" data-i18n="selectionCancel">Cancel</button>
       </div>
     </div>
 
     <!-- Loading state -->
     <div class="state loading" id="loading-state">
       <div class="spinner"></div>
-      <p>Loading posts...</p>
+      <p data-i18n="loadingPosts">Loading posts...</p>
     </div>
 
     <!-- Error state -->
@@ -104,7 +104,7 @@
         <path d="M24 4C12.96 4 4 12.96 4 24s8.96 20 20 20 20-8.96 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"/>
       </svg>
       <p id="error-message">Loading error</p>
-      <button class="retry-btn" id="retry-btn">Retry</button>
+      <button class="retry-btn" id="retry-btn" data-i18n="btnRetry">Retry</button>
     </div>
 
     <!-- Empty state -->
@@ -112,7 +112,7 @@
       <svg width="48" height="48" viewBox="0 0 48 48" fill="#9ca3af">
         <path d="M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm0 32H10V14h28v24z"/>
       </svg>
-      <p>No scheduled posts</p>
+      <p data-i18n="emptyNoPosts">No scheduled posts</p>
     </div>
 
     <!-- List view -->
@@ -144,11 +144,11 @@
     <div class="modal-overlay" id="bulk-tag-modal" hidden>
       <div class="modal">
         <div class="modal-header">
-          <h2 id="bulk-modal-title">Add Tag</h2>
+          <h2 id="bulk-modal-title" data-i18n="modalAddTag">Add Tag</h2>
           <button class="modal-close" id="bulk-modal-close">×</button>
         </div>
         <div class="modal-body">
-          <input type="text" id="bulk-tag-search" placeholder="Search or create tag...">
+          <input type="text" id="bulk-tag-search" data-i18n-placeholder="modalSearchPlaceholder" placeholder="Search or create tag...">
           <div class="bulk-tag-options" id="bulk-tag-options"></div>
         </div>
       </div>
@@ -157,6 +157,7 @@
 
   <script src="../lib/api.js"></script>
   <script src="../lib/analytics.js"></script>
+  <script src="../lib/i18n.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ let currentView = 'list';
 let currentMonth = new Date();
 let blogUrl = '';
 let api = null;
+let currentLocale = 'en';
 
 // Filter state
 let filterTags = [];
@@ -26,17 +27,15 @@ const postsList = document.getElementById('posts-list');
 const monthTitle = document.getElementById('month-title');
 const errorMessage = document.getElementById('error-message');
 
-// Month names
-const monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
 // Initialization
 async function init() {
   // Инициализация аналитики
   await analytics.init();
   analytics.trackPageView('sidepanel');
+
+  // Инициализация локализации
+  currentLocale = await getCurrentLocale();
+  applyTranslations();
 
   await loadFilterState();
   setupEventListeners();
@@ -238,7 +237,7 @@ function renderList() {
       const time = formatTime(new Date(post.published_at));
       const isScheduled = post.status === 'scheduled';
       const statusClass = isScheduled ? 'status-scheduled' : 'status-published';
-      const statusText = isScheduled ? 'scheduled' : 'published';
+      const statusText = isScheduled ? t('statusScheduled') : t('statusPublished');
       const dragHandle = (!selectionMode && isScheduled)
         ? '<div class="drag-handle" draggable="true">⠿</div>'
         : '';
@@ -477,7 +476,7 @@ function renderCalendar() {
   const month = currentMonth.getMonth();
   const timeline = document.getElementById('timeline');
 
-  monthTitle.textContent = `${monthNames[month]} ${year}`;
+  monthTitle.textContent = `${getMonthName(currentMonth, currentLocale)} ${year}`;
 
   const lastDay = new Date(year, month + 1, 0);
   const today = new Date();
@@ -498,19 +497,17 @@ function renderCalendar() {
     }
   });
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
   let html = '';
   for (let day = 1; day <= lastDay.getDate(); day++) {
     const date = new Date(year, month, day);
-    const dayName = dayNames[date.getDay()];
+    const dayName = getDayName(date, currentLocale);
     const dayPosts = postsByDay[day] || [];
     const isToday = date.toDateString() === today.toDateString();
     const isYesterday = date.toDateString() === yesterday.toDateString();
 
     let label = '';
-    if (isToday) label = ' (today)';
-    else if (isYesterday) label = ' (yesterday)';
+    if (isToday) label = ' ' + t('calendarToday');
+    else if (isYesterday) label = ' ' + t('calendarYesterday');
 
     const isPast = date.toDateString() !== today.toDateString() && date < today;
     const dayClass = `timeline-day${isToday ? ' timeline-today' : ''}${isPast ? ' timeline-past' : ''}${dayPosts.length > 0 ? ' has-posts' : ''}`;
@@ -654,17 +651,16 @@ function formatDateHeader(date) {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const dateStr = date.toDateString();
-  if (dateStr === yesterday.toDateString()) return 'Yesterday';
-  if (dateStr === today.toDateString()) return 'Today';
-  if (dateStr === tomorrow.toDateString()) return 'Tomorrow';
+  if (dateStr === yesterday.toDateString()) return t('dateYesterday');
+  if (dateStr === today.toDateString()) return t('dateToday');
+  if (dateStr === tomorrow.toDateString()) return t('dateTomorrow');
 
-  const options = { weekday: 'long', day: 'numeric', month: 'long' };
-  return date.toLocaleDateString('en-US', options);
+  return formatDateLong(date, currentLocale);
 }
 
 // Format time
 function formatTime(date) {
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  return formatTimeLocalized(date, currentLocale);
 }
 
 // Escape HTML
@@ -780,7 +776,7 @@ function renderFilterOptions() {
   );
 
   if (filteredTags.length === 0) {
-    container.innerHTML = '<div class="filter-no-results">No tags found</div>';
+    container.innerHTML = `<div class="filter-no-results">${t('filterNoResults')}</div>`;
     return;
   }
 
@@ -1008,7 +1004,9 @@ function togglePostSelection(postId) {
 }
 
 function updateSelectionCount() {
-  document.getElementById('selection-count').textContent = selectedPosts.size;
+  const count = selectedPosts.size;
+  const text = t('selectionPostsSelected', [String(count)]);
+  document.querySelector('.selection-info').textContent = text;
 }
 
 function updateSelectionUI() {
@@ -1025,13 +1023,13 @@ function updateSelectionUI() {
 
 function openBulkTagModal(action) {
   if (selectedPosts.size === 0) {
-    alert('Please select at least one post');
+    alert(t('alertSelectPost'));
     return;
   }
 
   bulkAction = action;
   document.getElementById('bulk-modal-title').textContent =
-    action === 'add' ? 'Add Tag' : 'Remove Tag';
+    action === 'add' ? t('modalAddTag') : t('modalRemoveTag');
   document.getElementById('bulk-tag-search').value = '';
   document.getElementById('bulk-tag-modal').hidden = false;
   document.getElementById('bulk-tag-search').focus();
@@ -1067,14 +1065,14 @@ function renderBulkTagOptions() {
   let html = '';
 
   // Option to create new tag (only for add action)
-  if (bulkAction === 'add' && searchValue && !tagsToShow.some(t => t.name.toLowerCase() === searchValue)) {
+  if (bulkAction === 'add' && searchValue && !tagsToShow.some(tag => tag.name.toLowerCase() === searchValue)) {
     html += `<div class="bulk-tag-option create-new" data-tag-name="${escapeHtml(searchValue)}">
-      + Create "${escapeHtml(searchValue)}"
+      ${t('bulkCreateNew', [searchValue])}
     </div>`;
   }
 
   if (tagsToShow.length === 0 && !searchValue) {
-    html = '<div class="bulk-tag-no-results">No tags available</div>';
+    html = `<div class="bulk-tag-no-results">${t('bulkNoTags')}</div>`;
   } else {
     html += tagsToShow.map(tag =>
       `<div class="bulk-tag-option" data-tag-id="${escapeHtml(tag.id)}" data-tag-name="${escapeHtml(tag.name)}">
@@ -1142,7 +1140,7 @@ async function bulkAddTag(tagName) {
     renderList();
   } catch (err) {
     console.error('Bulk add tag error:', err);
-    alert('Error adding tag: ' + err.message);
+    alert(t('alertErrorAddingTag', [err.message]));
     analytics.trackError('bulk_tag_add_error', err.message);
   }
 }
@@ -1167,7 +1165,7 @@ async function bulkRemoveTag(tagName) {
     renderList();
   } catch (err) {
     console.error('Bulk remove tag error:', err);
-    alert('Error removing tag: ' + err.message);
+    alert(t('alertErrorRemovingTag', [err.message]));
     analytics.trackError('bulk_tag_remove_error', err.message);
   }
 }
