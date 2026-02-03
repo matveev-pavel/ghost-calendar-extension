@@ -1,33 +1,33 @@
-# Политика конфиденциальности Ghost Calendar
+# Privacy Policy for Ghost Calendar
 
-## Какие данные собирает расширение
+## What data the extension collects
 
-Расширение Ghost Calendar хранит локально на вашем устройстве:
-- URL вашего Ghost блога
-- Admin API ключ для доступа к Ghost API
-- Предпочтительный режим отображения (список или календарь)
+Ghost Calendar extension stores locally on your device:
+- URL of your Ghost blog
+- Admin API key for Ghost API access
+- Preferred display mode (list or calendar)
 
-## Как используются данные
+## How data is used
 
-- Данные используются **только** для подключения к вашему Ghost блогу и получения списка запланированных постов
-- Данные **не передаются** третьим лицам
-- Данные **не отправляются** на внешние серверы (кроме вашего собственного Ghost блога)
+- Data is used **only** to connect to your Ghost blog and retrieve the list of scheduled posts
+- Data is **not shared** with third parties
+- Data is **not sent** to external servers (except your own Ghost blog)
 
-## Где хранятся данные
+## Where data is stored
 
-Все данные хранятся локально в хранилище браузера Chrome (`chrome.storage.sync`) и синхронизируются между вашими устройствами через ваш аккаунт Google.
+All data is stored locally in Chrome browser storage (`chrome.storage.local`) on your device.
 
-## Удаление данных
+## Deleting data
 
-Чтобы удалить все данные:
-1. Откройте настройки расширения
-2. Очистите поля URL и API ключ
-3. Или удалите расширение из браузера
+To delete all data:
+1. Open extension settings
+2. Clear the URL and API key fields
+3. Or remove the extension from browser
 
-## Контакты
+## Contact
 
-По вопросам конфиденциальности: [ваш email]
+For privacy questions: [your email]
 
 ---
 
-Дата обновления: Январь 2026
+Last updated: January 2026

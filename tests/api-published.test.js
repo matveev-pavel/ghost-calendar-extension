@@ -19,7 +19,7 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.getPublishedPosts()', () => {
-  it('вызывает API с фильтром published и датой от вчера', async () => {
+  it('calls API with published filter and date from yesterday', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;
@@ -36,7 +36,7 @@ describe('GhostAPI.getPublishedPosts()', () => {
     expect(url).toContain('fields=');
   });
 
-  it('возвращает пустой массив если постов нет', async () => {
+  it('returns empty array if no posts', async () => {
     fetch.mockResolvedValue({
       ok: true,
       json: async () => ({ posts: [] })

@@ -1,4 +1,4 @@
-// Мок chrome.storage
+// Mock chrome.storage
 globalThis.chrome = {
   storage: {
     sync: {
@@ -18,7 +18,7 @@ globalThis.chrome = {
   }
 };
 
-// Мок crypto.subtle (используем defineProperty, т.к. в Node crypto — read-only getter)
+// Mock crypto.subtle (using defineProperty since crypto is a read-only getter in Node)
 Object.defineProperty(globalThis, 'crypto', {
   value: {
     subtle: {
@@ -30,13 +30,13 @@ Object.defineProperty(globalThis, 'crypto', {
   configurable: true
 });
 
-// Мок fetch
+// Mock fetch
 globalThis.fetch = async (url, opts) => ({
   ok: true,
   json: async () => ({ posts: [], tags: [] })
 });
 
-// Мок btoa
+// Mock btoa
 if (typeof globalThis.btoa === 'undefined') {
   globalThis.btoa = (str) => Buffer.from(str, 'binary').toString('base64');
 }

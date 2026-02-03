@@ -20,7 +20,7 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.getAllTags()', () => {
-  it('загружает все теги блога', async () => {
+  it('loads all blog tags', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;

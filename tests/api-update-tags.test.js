@@ -30,7 +30,7 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.updatePostTags()', () => {
-  it('получает updated_at и отправляет PUT с массивом тегов', async () => {
+  it('gets updated_at and sends PUT with tags array', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;
@@ -52,7 +52,7 @@ describe('GhostAPI.updatePostTags()', () => {
     expect(body.posts[0].updated_at).toBe('2026-01-23T09:00:00Z');
   });
 
-  it('преобразует строковые теги в объекты с name', async () => {
+  it('converts string tags to objects with name', async () => {
     const mockFetch = vi.fn()
       .mockResolvedValueOnce({
         ok: true,

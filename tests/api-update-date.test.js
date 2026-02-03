@@ -3,14 +3,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 let GhostAPI;
 beforeEach(async () => {
   globalThis.fetch = vi.fn()
-    // Первый вызов — GET updated_at
+    // First call — GET updated_at
     .mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }]
       })
     })
-    // Второй вызов — PUT
+    // Second call — PUT
     .mockResolvedValueOnce({
       ok: true,
       json: async () => ({
@@ -30,7 +30,7 @@ beforeEach(async () => {
 });
 
 describe('GhostAPI.updatePostDate()', () => {
-  it('получает актуальный updated_at и отправляет PUT с published_at', async () => {
+  it('gets current updated_at and sends PUT with published_at', async () => {
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';
     api.tokenExp = Math.floor(Date.now() / 1000) + 300;
@@ -39,11 +39,11 @@ describe('GhostAPI.updatePostDate()', () => {
 
     expect(result.published_at).toBe('2026-01-25T10:00:00Z');
 
-    // Первый запрос — GET updated_at
+    // First request — GET updated_at
     const [getUrl] = fetch.mock.calls[0];
     expect(getUrl).toContain('/posts/post-1/?fields=id,updated_at');
 
-    // Второй запрос — PUT
+    // Second request — PUT
     const [putUrl, opts] = fetch.mock.calls[1];
     expect(putUrl).toContain('/posts/post-1/');
     expect(opts.method).toBe('PUT');
