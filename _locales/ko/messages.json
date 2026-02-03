@@ -1,0 +1,550 @@
+{
+  "extName": {
+    "message": "Ghost Calendar",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Ghost 예약 게시물 캘린더",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Ghost Calendar",
+    "description": "App title in header"
+  },
+  "btnList": {
+    "message": "목록",
+    "description": "List view button title"
+  },
+  "btnCalendar": {
+    "message": "캘린더",
+    "description": "Calendar view button title"
+  },
+  "btnSelectMultiple": {
+    "message": "여러 게시물 선택",
+    "description": "Selection mode button title"
+  },
+  "btnManageTags": {
+    "message": "태그 관리",
+    "description": "Open tags page button title"
+  },
+  "btnFilterByTags": {
+    "message": "태그로 필터",
+    "description": "Filter button title"
+  },
+  "btnFeedback": {
+    "message": "피드백",
+    "description": "Feedback button title"
+  },
+  "btnSettings": {
+    "message": "설정",
+    "description": "Settings button title"
+  },
+  "filterMatchAny": {
+    "message": "일부",
+    "description": "Match any tag filter mode"
+  },
+  "filterMatchAll": {
+    "message": "모두",
+    "description": "Match all tags filter mode"
+  },
+  "filterMatchAnyTitle": {
+    "message": "일부 태그 일치",
+    "description": "Match any tag filter mode tooltip"
+  },
+  "filterMatchAllTitle": {
+    "message": "모든 태그 일치",
+    "description": "Match all tags filter mode tooltip"
+  },
+  "filterClear": {
+    "message": "지우기",
+    "description": "Clear filter button"
+  },
+  "filterAddTag": {
+    "message": "태그 필터 추가",
+    "description": "Add tag to filter button title"
+  },
+  "filterSearchPlaceholder": {
+    "message": "태그 검색...",
+    "description": "Filter search input placeholder"
+  },
+  "filterNoResults": {
+    "message": "태그를 찾을 수 없음",
+    "description": "No tags found in filter dropdown"
+  },
+  "selectionPostsSelected": {
+    "message": "$COUNT$개 게시물 선택됨",
+    "description": "Selection bar counter",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "selectionAddTag": {
+    "message": "태그",
+    "description": "Add tag button in selection bar"
+  },
+  "selectionRemoveTag": {
+    "message": "태그",
+    "description": "Remove tag button in selection bar"
+  },
+  "selectionCancel": {
+    "message": "취소",
+    "description": "Cancel selection button"
+  },
+  "loadingPosts": {
+    "message": "게시물 로드 중...",
+    "description": "Loading posts message"
+  },
+  "loadingError": {
+    "message": "로드 오류",
+    "description": "Generic loading error"
+  },
+  "btnRetry": {
+    "message": "재시도",
+    "description": "Retry button"
+  },
+  "emptyNoPosts": {
+    "message": "예약된 게시물 없음",
+    "description": "Empty state message"
+  },
+  "modalAddTag": {
+    "message": "태그 추가",
+    "description": "Add tag modal title"
+  },
+  "modalRemoveTag": {
+    "message": "태그 제거",
+    "description": "Remove tag modal title"
+  },
+  "modalSearchPlaceholder": {
+    "message": "태그 검색 또는 생성...",
+    "description": "Bulk tag modal search placeholder"
+  },
+  "tagPlaceholder": {
+    "message": "태그...",
+    "description": "Tag input placeholder"
+  },
+  "addTagTitle": {
+    "message": "태그 추가",
+    "description": "Add tag button title"
+  },
+  "statusScheduled": {
+    "message": "예약됨",
+    "description": "Scheduled post status"
+  },
+  "statusPublished": {
+    "message": "게시됨",
+    "description": "Published post status"
+  },
+  "dateToday": {
+    "message": "오늘",
+    "description": "Today date label"
+  },
+  "dateYesterday": {
+    "message": "어제",
+    "description": "Yesterday date label"
+  },
+  "dateTomorrow": {
+    "message": "내일",
+    "description": "Tomorrow date label"
+  },
+  "calendarToday": {
+    "message": "(오늘)",
+    "description": "Today label in calendar"
+  },
+  "calendarYesterday": {
+    "message": "(어제)",
+    "description": "Yesterday label in calendar"
+  },
+  "alertSelectPost": {
+    "message": "게시물을 하나 이상 선택해 주세요",
+    "description": "Alert when no posts selected"
+  },
+  "alertErrorAddingTag": {
+    "message": "태그 추가 오류: $ERROR$",
+    "description": "Error adding tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "alertErrorRemovingTag": {
+    "message": "태그 제거 오류: $ERROR$",
+    "description": "Error removing tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "bulkNoTags": {
+    "message": "사용 가능한 태그 없음",
+    "description": "No tags in bulk tag modal"
+  },
+  "bulkCreateNew": {
+    "message": "+ \"$NAME$\" 생성",
+    "description": "Create new tag option",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "설정",
+    "description": "Options page title"
+  },
+  "optionsSubtitle": {
+    "message": "Ghost 블로그 연결 설정",
+    "description": "Options page subtitle"
+  },
+  "labelLanguage": {
+    "message": "언어",
+    "description": "Language selector label"
+  },
+  "languageAuto": {
+    "message": "자동 (브라우저)",
+    "description": "Auto-detect language option"
+  },
+  "labelBlogUrl": {
+    "message": "블로그 URL",
+    "description": "Blog URL field label"
+  },
+  "placeholderBlogUrl": {
+    "message": "https://blog.example.com",
+    "description": "Blog URL placeholder"
+  },
+  "hintBlogUrl": {
+    "message": "Ghost 블로그의 전체 URL",
+    "description": "Blog URL hint"
+  },
+  "labelApiKey": {
+    "message": "Admin API Key",
+    "description": "API key field label"
+  },
+  "placeholderApiKey": {
+    "message": "xxxxxxxxxxxxxxxxxxxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy",
+    "description": "API key placeholder"
+  },
+  "hintApiKey": {
+    "message": "Ghost 관리자에서 찾기: 설정 → 통합 →",
+    "description": "API key hint"
+  },
+  "hintApiKeyLink": {
+    "message": "사용자 정의 통합 추가",
+    "description": "API key hint link text"
+  },
+  "btnTest": {
+    "message": "테스트",
+    "description": "Test connection button"
+  },
+  "btnSave": {
+    "message": "저장",
+    "description": "Save button"
+  },
+  "msgTesting": {
+    "message": "연결 테스트 중...",
+    "description": "Testing connection status"
+  },
+  "msgConnected": {
+    "message": "연결됨! 게시물 수: $COUNT$",
+    "description": "Connection success message",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "42"
+      }
+    }
+  },
+  "msgSaving": {
+    "message": "저장 중...",
+    "description": "Saving status"
+  },
+  "msgSaved": {
+    "message": "설정이 저장되었습니다!",
+    "description": "Settings saved message"
+  },
+  "msgSaveError": {
+    "message": "저장 오류: $ERROR$",
+    "description": "Save error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgError": {
+    "message": "오류: $ERROR$",
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errFillAllFields": {
+    "message": "모든 필드를 입력해 주세요",
+    "description": "Fill all fields error"
+  },
+  "errBlogUrlRequired": {
+    "message": "블로그 URL이 지정되지 않았습니다",
+    "description": "Blog URL required error"
+  },
+  "errHttpsRequired": {
+    "message": "보안 연결을 위해 URL은 HTTPS를 사용해야 합니다",
+    "description": "HTTPS required error"
+  },
+  "errInvalidUrl": {
+    "message": "블로그 URL 형식이 잘못되었습니다",
+    "description": "Invalid URL error"
+  },
+  "errInvalidApiKey": {
+    "message": "API 키 형식이 잘못되었습니다",
+    "description": "Invalid API key error"
+  },
+  "errInvalidSecret": {
+    "message": "시크릿 형식이 잘못되었습니다. 시크릿은 16진수 형식이어야 합니다",
+    "description": "Invalid secret error"
+  },
+  "errInvalidSecretLength": {
+    "message": "시크릿 길이가 잘못되었습니다. 길이는 짝수여야 합니다",
+    "description": "Invalid secret length error"
+  },
+  "errEnterBlogUrl": {
+    "message": "먼저 블로그 URL을 입력해 주세요",
+    "description": "Enter blog URL first error"
+  },
+  "msgLanguageChanged": {
+    "message": "언어가 변경되었습니다. 확장 프로그램을 다시 로드하여 적용하세요.",
+    "description": "Language change message"
+  },
+  "tagsTitle": {
+    "message": "태그 관리",
+    "description": "Tags page title"
+  },
+  "btnBackToCalendar": {
+    "message": "캘린더로 돌아가기",
+    "description": "Back button title"
+  },
+  "btnNewTag": {
+    "message": "새 태그",
+    "description": "New tag button"
+  },
+  "tabPublicTags": {
+    "message": "공개 태그",
+    "description": "Public tags tab"
+  },
+  "tabInternalTags": {
+    "message": "내부 태그 (#)",
+    "description": "Internal tags tab"
+  },
+  "searchTagsPlaceholder": {
+    "message": "태그 검색...",
+    "description": "Search tags placeholder"
+  },
+  "selectAll": {
+    "message": "모두 선택",
+    "description": "Select all checkbox label"
+  },
+  "selectedCount": {
+    "message": "$COUNT$개 선택됨",
+    "description": "Selected items count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "btnDeleteSelected": {
+    "message": "선택 항목 삭제",
+    "description": "Delete selected button"
+  },
+  "loadingTags": {
+    "message": "태그 로드 중...",
+    "description": "Loading tags message"
+  },
+  "emptyNoTags": {
+    "message": "태그를 찾을 수 없음",
+    "description": "No tags empty state"
+  },
+  "btnCreateFirstTag": {
+    "message": "첫 태그 만들기",
+    "description": "Create first tag button"
+  },
+  "modalNewTag": {
+    "message": "새 태그",
+    "description": "New tag modal title"
+  },
+  "modalEditTag": {
+    "message": "태그 수정",
+    "description": "Edit tag modal title"
+  },
+  "labelTagName": {
+    "message": "이름",
+    "description": "Tag name label"
+  },
+  "placeholderTagName": {
+    "message": "태그 이름",
+    "description": "Tag name placeholder"
+  },
+  "hintTagName": {
+    "message": "내부 태그는 #으로 시작합니다 (예: #featured)",
+    "description": "Tag name hint"
+  },
+  "labelTagSlug": {
+    "message": "Slug",
+    "description": "Tag slug label"
+  },
+  "placeholderTagSlug": {
+    "message": "tag-slug",
+    "description": "Tag slug placeholder"
+  },
+  "hintTagSlug": {
+    "message": "URL 친화적 버전 (자동 생성)",
+    "description": "Tag slug hint"
+  },
+  "labelTagDescription": {
+    "message": "설명",
+    "description": "Tag description label"
+  },
+  "placeholderTagDescription": {
+    "message": "선택적 설명...",
+    "description": "Tag description placeholder"
+  },
+  "btnCancel": {
+    "message": "취소",
+    "description": "Cancel button"
+  },
+  "modalDeleteTag": {
+    "message": "태그 삭제",
+    "description": "Delete tag modal title"
+  },
+  "modalDeleteTags": {
+    "message": "태그 삭제",
+    "description": "Delete multiple tags modal title"
+  },
+  "msgDeleteConfirm": {
+    "message": "$NAME$을(를) 삭제하시겠습니까?",
+    "description": "Delete confirmation message",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "msgDeleteMultipleConfirm": {
+    "message": "$COUNT$개의 태그를 삭제하시겠습니까?",
+    "description": "Delete multiple confirmation",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "msgDeleteWarning": {
+    "message": "이렇게 하면 모든 게시물에서 태그가 제거됩니다.",
+    "description": "Delete warning message"
+  },
+  "btnDelete": {
+    "message": "삭제",
+    "description": "Delete button"
+  },
+  "errTagNameRequired": {
+    "message": "태그 이름은 필수입니다",
+    "description": "Tag name required error"
+  },
+  "errTagNotCreated": {
+    "message": "태그가 생성되지 않았습니다 - 서버에서 빈 응답",
+    "description": "Tag creation error"
+  },
+  "errSavingTag": {
+    "message": "태그 저장 오류: $ERROR$",
+    "description": "Tag save error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTag": {
+    "message": "태그 삭제 오류: $ERROR$",
+    "description": "Tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTags": {
+    "message": "태그 삭제 오류: $ERROR$",
+    "description": "Bulk tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgBulkDeleteResult": {
+    "message": "$DELETED$개 태그 삭제됨. $FAILED$개 태그 삭제 실패.",
+    "description": "Bulk delete result message",
+    "placeholders": {
+      "deleted": {
+        "content": "$1",
+        "example": "3"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "tagPostCount": {
+    "message": "$COUNT$개 게시물",
+    "description": "Tag post count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "tagPostCountSingle": {
+    "message": "1개 게시물",
+    "description": "Single post count"
+  },
+  "noTagsMatching": {
+    "message": "\"$QUERY$\"와(과) 일치하는 태그 없음",
+    "description": "No tags matching search",
+    "placeholders": {
+      "query": {
+        "content": "$1",
+        "example": "test"
+      }
+    }
+  },
+  "noPublicTags": {
+    "message": "공개 태그 없음",
+    "description": "No public tags message"
+  },
+  "noInternalTags": {
+    "message": "내부 태그 없음",
+    "description": "No internal tags message"
+  },
+  "btnEdit": {
+    "message": "수정",
+    "description": "Edit button title"
+  }
+}

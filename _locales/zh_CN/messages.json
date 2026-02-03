@@ -1,0 +1,550 @@
+{
+  "extName": {
+    "message": "Ghost Calendar",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Ghost 定时发布文章日历",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Ghost Calendar",
+    "description": "App title in header"
+  },
+  "btnList": {
+    "message": "列表",
+    "description": "List view button title"
+  },
+  "btnCalendar": {
+    "message": "日历",
+    "description": "Calendar view button title"
+  },
+  "btnSelectMultiple": {
+    "message": "批量选择文章",
+    "description": "Selection mode button title"
+  },
+  "btnManageTags": {
+    "message": "管理标签",
+    "description": "Open tags page button title"
+  },
+  "btnFilterByTags": {
+    "message": "按标签筛选",
+    "description": "Filter button title"
+  },
+  "btnFeedback": {
+    "message": "反馈",
+    "description": "Feedback button title"
+  },
+  "btnSettings": {
+    "message": "设置",
+    "description": "Settings button title"
+  },
+  "filterMatchAny": {
+    "message": "任意",
+    "description": "Match any tag filter mode"
+  },
+  "filterMatchAll": {
+    "message": "全部",
+    "description": "Match all tags filter mode"
+  },
+  "filterMatchAnyTitle": {
+    "message": "匹配任意标签",
+    "description": "Match any tag filter mode tooltip"
+  },
+  "filterMatchAllTitle": {
+    "message": "匹配所有标签",
+    "description": "Match all tags filter mode tooltip"
+  },
+  "filterClear": {
+    "message": "清除",
+    "description": "Clear filter button"
+  },
+  "filterAddTag": {
+    "message": "添加标签筛选",
+    "description": "Add tag to filter button title"
+  },
+  "filterSearchPlaceholder": {
+    "message": "搜索标签...",
+    "description": "Filter search input placeholder"
+  },
+  "filterNoResults": {
+    "message": "未找到标签",
+    "description": "No tags found in filter dropdown"
+  },
+  "selectionPostsSelected": {
+    "message": "已选择 $COUNT$ 篇文章",
+    "description": "Selection bar counter",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "selectionAddTag": {
+    "message": "标签",
+    "description": "Add tag button in selection bar"
+  },
+  "selectionRemoveTag": {
+    "message": "标签",
+    "description": "Remove tag button in selection bar"
+  },
+  "selectionCancel": {
+    "message": "取消",
+    "description": "Cancel selection button"
+  },
+  "loadingPosts": {
+    "message": "正在加载文章...",
+    "description": "Loading posts message"
+  },
+  "loadingError": {
+    "message": "加载错误",
+    "description": "Generic loading error"
+  },
+  "btnRetry": {
+    "message": "重试",
+    "description": "Retry button"
+  },
+  "emptyNoPosts": {
+    "message": "没有定时发布的文章",
+    "description": "Empty state message"
+  },
+  "modalAddTag": {
+    "message": "添加标签",
+    "description": "Add tag modal title"
+  },
+  "modalRemoveTag": {
+    "message": "移除标签",
+    "description": "Remove tag modal title"
+  },
+  "modalSearchPlaceholder": {
+    "message": "搜索或创建标签...",
+    "description": "Bulk tag modal search placeholder"
+  },
+  "tagPlaceholder": {
+    "message": "标签...",
+    "description": "Tag input placeholder"
+  },
+  "addTagTitle": {
+    "message": "添加标签",
+    "description": "Add tag button title"
+  },
+  "statusScheduled": {
+    "message": "已计划",
+    "description": "Scheduled post status"
+  },
+  "statusPublished": {
+    "message": "已发布",
+    "description": "Published post status"
+  },
+  "dateToday": {
+    "message": "今天",
+    "description": "Today date label"
+  },
+  "dateYesterday": {
+    "message": "昨天",
+    "description": "Yesterday date label"
+  },
+  "dateTomorrow": {
+    "message": "明天",
+    "description": "Tomorrow date label"
+  },
+  "calendarToday": {
+    "message": "(今天)",
+    "description": "Today label in calendar"
+  },
+  "calendarYesterday": {
+    "message": "(昨天)",
+    "description": "Yesterday label in calendar"
+  },
+  "alertSelectPost": {
+    "message": "请至少选择一篇文章",
+    "description": "Alert when no posts selected"
+  },
+  "alertErrorAddingTag": {
+    "message": "添加标签时出错：$ERROR$",
+    "description": "Error adding tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "alertErrorRemovingTag": {
+    "message": "移除标签时出错：$ERROR$",
+    "description": "Error removing tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "bulkNoTags": {
+    "message": "没有可用的标签",
+    "description": "No tags in bulk tag modal"
+  },
+  "bulkCreateNew": {
+    "message": "+ 创建「$NAME$」",
+    "description": "Create new tag option",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "设置",
+    "description": "Options page title"
+  },
+  "optionsSubtitle": {
+    "message": "配置与 Ghost 博客的连接",
+    "description": "Options page subtitle"
+  },
+  "labelLanguage": {
+    "message": "语言",
+    "description": "Language selector label"
+  },
+  "languageAuto": {
+    "message": "自动（浏览器）",
+    "description": "Auto-detect language option"
+  },
+  "labelBlogUrl": {
+    "message": "博客 URL",
+    "description": "Blog URL field label"
+  },
+  "placeholderBlogUrl": {
+    "message": "https://blog.example.com",
+    "description": "Blog URL placeholder"
+  },
+  "hintBlogUrl": {
+    "message": "Ghost 博客的完整 URL",
+    "description": "Blog URL hint"
+  },
+  "labelApiKey": {
+    "message": "Admin API Key",
+    "description": "API key field label"
+  },
+  "placeholderApiKey": {
+    "message": "xxxxxxxxxxxxxxxxxxxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy",
+    "description": "API key placeholder"
+  },
+  "hintApiKey": {
+    "message": "在 Ghost 管理后台找到：设置 → 集成 →",
+    "description": "API key hint"
+  },
+  "hintApiKeyLink": {
+    "message": "添加自定义集成",
+    "description": "API key hint link text"
+  },
+  "btnTest": {
+    "message": "测试",
+    "description": "Test connection button"
+  },
+  "btnSave": {
+    "message": "保存",
+    "description": "Save button"
+  },
+  "msgTesting": {
+    "message": "正在测试连接...",
+    "description": "Testing connection status"
+  },
+  "msgConnected": {
+    "message": "连接成功！找到文章数：$COUNT$",
+    "description": "Connection success message",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "42"
+      }
+    }
+  },
+  "msgSaving": {
+    "message": "正在保存...",
+    "description": "Saving status"
+  },
+  "msgSaved": {
+    "message": "设置已保存！",
+    "description": "Settings saved message"
+  },
+  "msgSaveError": {
+    "message": "保存错误：$ERROR$",
+    "description": "Save error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgError": {
+    "message": "错误：$ERROR$",
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errFillAllFields": {
+    "message": "请填写所有字段",
+    "description": "Fill all fields error"
+  },
+  "errBlogUrlRequired": {
+    "message": "未指定博客 URL",
+    "description": "Blog URL required error"
+  },
+  "errHttpsRequired": {
+    "message": "URL 必须使用 HTTPS 以确保安全连接",
+    "description": "HTTPS required error"
+  },
+  "errInvalidUrl": {
+    "message": "博客 URL 格式无效",
+    "description": "Invalid URL error"
+  },
+  "errInvalidApiKey": {
+    "message": "API 密钥格式无效",
+    "description": "Invalid API key error"
+  },
+  "errInvalidSecret": {
+    "message": "密钥格式无效。密钥必须为十六进制格式",
+    "description": "Invalid secret error"
+  },
+  "errInvalidSecretLength": {
+    "message": "密钥长度无效。长度必须为偶数",
+    "description": "Invalid secret length error"
+  },
+  "errEnterBlogUrl": {
+    "message": "请先输入博客 URL",
+    "description": "Enter blog URL first error"
+  },
+  "msgLanguageChanged": {
+    "message": "语言已更改。重新加载扩展程序以应用。",
+    "description": "Language change message"
+  },
+  "tagsTitle": {
+    "message": "标签管理",
+    "description": "Tags page title"
+  },
+  "btnBackToCalendar": {
+    "message": "返回日历",
+    "description": "Back button title"
+  },
+  "btnNewTag": {
+    "message": "新建标签",
+    "description": "New tag button"
+  },
+  "tabPublicTags": {
+    "message": "公开标签",
+    "description": "Public tags tab"
+  },
+  "tabInternalTags": {
+    "message": "内部标签 (#)",
+    "description": "Internal tags tab"
+  },
+  "searchTagsPlaceholder": {
+    "message": "搜索标签...",
+    "description": "Search tags placeholder"
+  },
+  "selectAll": {
+    "message": "全选",
+    "description": "Select all checkbox label"
+  },
+  "selectedCount": {
+    "message": "已选择 $COUNT$ 个",
+    "description": "Selected items count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "btnDeleteSelected": {
+    "message": "删除所选",
+    "description": "Delete selected button"
+  },
+  "loadingTags": {
+    "message": "正在加载标签...",
+    "description": "Loading tags message"
+  },
+  "emptyNoTags": {
+    "message": "未找到标签",
+    "description": "No tags empty state"
+  },
+  "btnCreateFirstTag": {
+    "message": "创建第一个标签",
+    "description": "Create first tag button"
+  },
+  "modalNewTag": {
+    "message": "新建标签",
+    "description": "New tag modal title"
+  },
+  "modalEditTag": {
+    "message": "编辑标签",
+    "description": "Edit tag modal title"
+  },
+  "labelTagName": {
+    "message": "名称",
+    "description": "Tag name label"
+  },
+  "placeholderTagName": {
+    "message": "标签名称",
+    "description": "Tag name placeholder"
+  },
+  "hintTagName": {
+    "message": "内部标签以 # 开头（例如 #featured）",
+    "description": "Tag name hint"
+  },
+  "labelTagSlug": {
+    "message": "Slug",
+    "description": "Tag slug label"
+  },
+  "placeholderTagSlug": {
+    "message": "tag-slug",
+    "description": "Tag slug placeholder"
+  },
+  "hintTagSlug": {
+    "message": "URL 友好版本（自动生成）",
+    "description": "Tag slug hint"
+  },
+  "labelTagDescription": {
+    "message": "描述",
+    "description": "Tag description label"
+  },
+  "placeholderTagDescription": {
+    "message": "可选描述...",
+    "description": "Tag description placeholder"
+  },
+  "btnCancel": {
+    "message": "取消",
+    "description": "Cancel button"
+  },
+  "modalDeleteTag": {
+    "message": "删除标签",
+    "description": "Delete tag modal title"
+  },
+  "modalDeleteTags": {
+    "message": "删除标签",
+    "description": "Delete multiple tags modal title"
+  },
+  "msgDeleteConfirm": {
+    "message": "确定要删除 $NAME$ 吗？",
+    "description": "Delete confirmation message",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "msgDeleteMultipleConfirm": {
+    "message": "确定要删除 $COUNT$ 个标签吗？",
+    "description": "Delete multiple confirmation",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "msgDeleteWarning": {
+    "message": "这将从所有文章中移除该标签。",
+    "description": "Delete warning message"
+  },
+  "btnDelete": {
+    "message": "删除",
+    "description": "Delete button"
+  },
+  "errTagNameRequired": {
+    "message": "标签名称为必填项",
+    "description": "Tag name required error"
+  },
+  "errTagNotCreated": {
+    "message": "标签未创建 - 服务器返回空响应",
+    "description": "Tag creation error"
+  },
+  "errSavingTag": {
+    "message": "保存标签时出错：$ERROR$",
+    "description": "Tag save error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTag": {
+    "message": "删除标签时出错：$ERROR$",
+    "description": "Tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTags": {
+    "message": "删除标签时出错：$ERROR$",
+    "description": "Bulk tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgBulkDeleteResult": {
+    "message": "已删除 $DELETED$ 个标签。$FAILED$ 个标签删除失败。",
+    "description": "Bulk delete result message",
+    "placeholders": {
+      "deleted": {
+        "content": "$1",
+        "example": "3"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "tagPostCount": {
+    "message": "$COUNT$ 篇文章",
+    "description": "Tag post count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "tagPostCountSingle": {
+    "message": "1 篇文章",
+    "description": "Single post count"
+  },
+  "noTagsMatching": {
+    "message": "没有匹配「$QUERY$」的标签",
+    "description": "No tags matching search",
+    "placeholders": {
+      "query": {
+        "content": "$1",
+        "example": "test"
+      }
+    }
+  },
+  "noPublicTags": {
+    "message": "没有公开标签",
+    "description": "No public tags message"
+  },
+  "noInternalTags": {
+    "message": "没有内部标签",
+    "description": "No internal tags message"
+  },
+  "btnEdit": {
+    "message": "编辑",
+    "description": "Edit button title"
+  }
+}

@@ -1,0 +1,550 @@
+{
+  "extName": {
+    "message": "Ghost Calendar",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Calendario para publicaciones programadas de Ghost",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Ghost Calendar",
+    "description": "App title in header"
+  },
+  "btnList": {
+    "message": "Lista",
+    "description": "List view button title"
+  },
+  "btnCalendar": {
+    "message": "Calendario",
+    "description": "Calendar view button title"
+  },
+  "btnSelectMultiple": {
+    "message": "Seleccionar varias publicaciones",
+    "description": "Selection mode button title"
+  },
+  "btnManageTags": {
+    "message": "Gestionar etiquetas",
+    "description": "Open tags page button title"
+  },
+  "btnFilterByTags": {
+    "message": "Filtrar por etiquetas",
+    "description": "Filter button title"
+  },
+  "btnFeedback": {
+    "message": "Comentarios",
+    "description": "Feedback button title"
+  },
+  "btnSettings": {
+    "message": "Configuracion",
+    "description": "Settings button title"
+  },
+  "filterMatchAny": {
+    "message": "Cualquiera",
+    "description": "Match any tag filter mode"
+  },
+  "filterMatchAll": {
+    "message": "Todas",
+    "description": "Match all tags filter mode"
+  },
+  "filterMatchAnyTitle": {
+    "message": "Coincidir con cualquier etiqueta",
+    "description": "Match any tag filter mode tooltip"
+  },
+  "filterMatchAllTitle": {
+    "message": "Coincidir con todas las etiquetas",
+    "description": "Match all tags filter mode tooltip"
+  },
+  "filterClear": {
+    "message": "Limpiar",
+    "description": "Clear filter button"
+  },
+  "filterAddTag": {
+    "message": "Agregar filtro de etiqueta",
+    "description": "Add tag to filter button title"
+  },
+  "filterSearchPlaceholder": {
+    "message": "Buscar etiquetas...",
+    "description": "Filter search input placeholder"
+  },
+  "filterNoResults": {
+    "message": "No se encontraron etiquetas",
+    "description": "No tags found in filter dropdown"
+  },
+  "selectionPostsSelected": {
+    "message": "$COUNT$ publicaciones seleccionadas",
+    "description": "Selection bar counter",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "selectionAddTag": {
+    "message": "Etiqueta",
+    "description": "Add tag button in selection bar"
+  },
+  "selectionRemoveTag": {
+    "message": "Etiqueta",
+    "description": "Remove tag button in selection bar"
+  },
+  "selectionCancel": {
+    "message": "Cancelar",
+    "description": "Cancel selection button"
+  },
+  "loadingPosts": {
+    "message": "Cargando publicaciones...",
+    "description": "Loading posts message"
+  },
+  "loadingError": {
+    "message": "Error de carga",
+    "description": "Generic loading error"
+  },
+  "btnRetry": {
+    "message": "Reintentar",
+    "description": "Retry button"
+  },
+  "emptyNoPosts": {
+    "message": "No hay publicaciones programadas",
+    "description": "Empty state message"
+  },
+  "modalAddTag": {
+    "message": "Agregar etiqueta",
+    "description": "Add tag modal title"
+  },
+  "modalRemoveTag": {
+    "message": "Eliminar etiqueta",
+    "description": "Remove tag modal title"
+  },
+  "modalSearchPlaceholder": {
+    "message": "Buscar o crear etiqueta...",
+    "description": "Bulk tag modal search placeholder"
+  },
+  "tagPlaceholder": {
+    "message": "etiqueta...",
+    "description": "Tag input placeholder"
+  },
+  "addTagTitle": {
+    "message": "Agregar etiqueta",
+    "description": "Add tag button title"
+  },
+  "statusScheduled": {
+    "message": "programada",
+    "description": "Scheduled post status"
+  },
+  "statusPublished": {
+    "message": "publicada",
+    "description": "Published post status"
+  },
+  "dateToday": {
+    "message": "Hoy",
+    "description": "Today date label"
+  },
+  "dateYesterday": {
+    "message": "Ayer",
+    "description": "Yesterday date label"
+  },
+  "dateTomorrow": {
+    "message": "Manana",
+    "description": "Tomorrow date label"
+  },
+  "calendarToday": {
+    "message": "(hoy)",
+    "description": "Today label in calendar"
+  },
+  "calendarYesterday": {
+    "message": "(ayer)",
+    "description": "Yesterday label in calendar"
+  },
+  "alertSelectPost": {
+    "message": "Por favor seleccione al menos una publicacion",
+    "description": "Alert when no posts selected"
+  },
+  "alertErrorAddingTag": {
+    "message": "Error al agregar etiqueta: $ERROR$",
+    "description": "Error adding tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "alertErrorRemovingTag": {
+    "message": "Error al eliminar etiqueta: $ERROR$",
+    "description": "Error removing tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "bulkNoTags": {
+    "message": "No hay etiquetas disponibles",
+    "description": "No tags in bulk tag modal"
+  },
+  "bulkCreateNew": {
+    "message": "+ Crear \"$NAME$\"",
+    "description": "Create new tag option",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "Configuracion",
+    "description": "Options page title"
+  },
+  "optionsSubtitle": {
+    "message": "Configurar conexion a tu blog Ghost",
+    "description": "Options page subtitle"
+  },
+  "labelLanguage": {
+    "message": "Idioma",
+    "description": "Language selector label"
+  },
+  "languageAuto": {
+    "message": "Automatico (Navegador)",
+    "description": "Auto-detect language option"
+  },
+  "labelBlogUrl": {
+    "message": "URL del Blog",
+    "description": "Blog URL field label"
+  },
+  "placeholderBlogUrl": {
+    "message": "https://blog.example.com",
+    "description": "Blog URL placeholder"
+  },
+  "hintBlogUrl": {
+    "message": "URL completa de tu blog Ghost",
+    "description": "Blog URL hint"
+  },
+  "labelApiKey": {
+    "message": "Clave API de Admin",
+    "description": "API key field label"
+  },
+  "placeholderApiKey": {
+    "message": "xxxxxxxxxxxxxxxxxxxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy",
+    "description": "API key placeholder"
+  },
+  "hintApiKey": {
+    "message": "Buscar en Ghost Admin: Configuracion → Integraciones →",
+    "description": "API key hint"
+  },
+  "hintApiKeyLink": {
+    "message": "Agregar integracion personalizada",
+    "description": "API key hint link text"
+  },
+  "btnTest": {
+    "message": "Probar",
+    "description": "Test connection button"
+  },
+  "btnSave": {
+    "message": "Guardar",
+    "description": "Save button"
+  },
+  "msgTesting": {
+    "message": "Probando conexion...",
+    "description": "Testing connection status"
+  },
+  "msgConnected": {
+    "message": "Conectado! Publicaciones encontradas: $COUNT$",
+    "description": "Connection success message",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "42"
+      }
+    }
+  },
+  "msgSaving": {
+    "message": "Guardando...",
+    "description": "Saving status"
+  },
+  "msgSaved": {
+    "message": "Configuracion guardada!",
+    "description": "Settings saved message"
+  },
+  "msgSaveError": {
+    "message": "Error al guardar: $ERROR$",
+    "description": "Save error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgError": {
+    "message": "Error: $ERROR$",
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errFillAllFields": {
+    "message": "Por favor complete todos los campos",
+    "description": "Fill all fields error"
+  },
+  "errBlogUrlRequired": {
+    "message": "La URL del blog no esta especificada",
+    "description": "Blog URL required error"
+  },
+  "errHttpsRequired": {
+    "message": "La URL debe usar HTTPS para una conexion segura",
+    "description": "HTTPS required error"
+  },
+  "errInvalidUrl": {
+    "message": "Formato de URL del blog invalido",
+    "description": "Invalid URL error"
+  },
+  "errInvalidApiKey": {
+    "message": "Formato de clave API invalido",
+    "description": "Invalid API key error"
+  },
+  "errInvalidSecret": {
+    "message": "Formato de secreto invalido. El secreto debe estar en formato hexadecimal",
+    "description": "Invalid secret error"
+  },
+  "errInvalidSecretLength": {
+    "message": "Longitud de secreto invalida. La longitud debe ser par",
+    "description": "Invalid secret length error"
+  },
+  "errEnterBlogUrl": {
+    "message": "Por favor ingrese primero la URL del blog",
+    "description": "Enter blog URL first error"
+  },
+  "msgLanguageChanged": {
+    "message": "Idioma cambiado. Recargue la extension para aplicar.",
+    "description": "Language change message"
+  },
+  "tagsTitle": {
+    "message": "Gestion de etiquetas",
+    "description": "Tags page title"
+  },
+  "btnBackToCalendar": {
+    "message": "Volver al calendario",
+    "description": "Back button title"
+  },
+  "btnNewTag": {
+    "message": "Nueva etiqueta",
+    "description": "New tag button"
+  },
+  "tabPublicTags": {
+    "message": "Etiquetas publicas",
+    "description": "Public tags tab"
+  },
+  "tabInternalTags": {
+    "message": "Etiquetas internas (#)",
+    "description": "Internal tags tab"
+  },
+  "searchTagsPlaceholder": {
+    "message": "Buscar etiquetas...",
+    "description": "Search tags placeholder"
+  },
+  "selectAll": {
+    "message": "Seleccionar todo",
+    "description": "Select all checkbox label"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ seleccionadas",
+    "description": "Selected items count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "btnDeleteSelected": {
+    "message": "Eliminar seleccionadas",
+    "description": "Delete selected button"
+  },
+  "loadingTags": {
+    "message": "Cargando etiquetas...",
+    "description": "Loading tags message"
+  },
+  "emptyNoTags": {
+    "message": "No se encontraron etiquetas",
+    "description": "No tags empty state"
+  },
+  "btnCreateFirstTag": {
+    "message": "Crear primera etiqueta",
+    "description": "Create first tag button"
+  },
+  "modalNewTag": {
+    "message": "Nueva etiqueta",
+    "description": "New tag modal title"
+  },
+  "modalEditTag": {
+    "message": "Editar etiqueta",
+    "description": "Edit tag modal title"
+  },
+  "labelTagName": {
+    "message": "Nombre",
+    "description": "Tag name label"
+  },
+  "placeholderTagName": {
+    "message": "Nombre de etiqueta",
+    "description": "Tag name placeholder"
+  },
+  "hintTagName": {
+    "message": "Las etiquetas internas comienzan con # (ej., #destacado)",
+    "description": "Tag name hint"
+  },
+  "labelTagSlug": {
+    "message": "Slug",
+    "description": "Tag slug label"
+  },
+  "placeholderTagSlug": {
+    "message": "slug-etiqueta",
+    "description": "Tag slug placeholder"
+  },
+  "hintTagSlug": {
+    "message": "Version amigable para URL (generada automaticamente)",
+    "description": "Tag slug hint"
+  },
+  "labelTagDescription": {
+    "message": "Descripcion",
+    "description": "Tag description label"
+  },
+  "placeholderTagDescription": {
+    "message": "Descripcion opcional...",
+    "description": "Tag description placeholder"
+  },
+  "btnCancel": {
+    "message": "Cancelar",
+    "description": "Cancel button"
+  },
+  "modalDeleteTag": {
+    "message": "Eliminar etiqueta",
+    "description": "Delete tag modal title"
+  },
+  "modalDeleteTags": {
+    "message": "Eliminar etiquetas",
+    "description": "Delete multiple tags modal title"
+  },
+  "msgDeleteConfirm": {
+    "message": "Esta seguro de que desea eliminar $NAME$?",
+    "description": "Delete confirmation message",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "msgDeleteMultipleConfirm": {
+    "message": "Esta seguro de que desea eliminar $COUNT$ etiquetas?",
+    "description": "Delete multiple confirmation",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "msgDeleteWarning": {
+    "message": "Esto eliminara la(s) etiqueta(s) de todas las publicaciones.",
+    "description": "Delete warning message"
+  },
+  "btnDelete": {
+    "message": "Eliminar",
+    "description": "Delete button"
+  },
+  "errTagNameRequired": {
+    "message": "El nombre de la etiqueta es obligatorio",
+    "description": "Tag name required error"
+  },
+  "errTagNotCreated": {
+    "message": "La etiqueta no fue creada - respuesta vacia del servidor",
+    "description": "Tag creation error"
+  },
+  "errSavingTag": {
+    "message": "Error al guardar etiqueta: $ERROR$",
+    "description": "Tag save error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTag": {
+    "message": "Error al eliminar etiqueta: $ERROR$",
+    "description": "Tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTags": {
+    "message": "Error al eliminar etiquetas: $ERROR$",
+    "description": "Bulk tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgBulkDeleteResult": {
+    "message": "Eliminadas $DELETED$ etiquetas. Error al eliminar $FAILED$ etiquetas.",
+    "description": "Bulk delete result message",
+    "placeholders": {
+      "deleted": {
+        "content": "$1",
+        "example": "3"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "tagPostCount": {
+    "message": "$COUNT$ publicaciones",
+    "description": "Tag post count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "tagPostCountSingle": {
+    "message": "1 publicacion",
+    "description": "Single post count"
+  },
+  "noTagsMatching": {
+    "message": "No hay etiquetas que coincidan con \"$QUERY$\"",
+    "description": "No tags matching search",
+    "placeholders": {
+      "query": {
+        "content": "$1",
+        "example": "test"
+      }
+    }
+  },
+  "noPublicTags": {
+    "message": "No se encontraron etiquetas publicas",
+    "description": "No public tags message"
+  },
+  "noInternalTags": {
+    "message": "No se encontraron etiquetas internas",
+    "description": "No internal tags message"
+  },
+  "btnEdit": {
+    "message": "Editar",
+    "description": "Edit button title"
+  }
+}

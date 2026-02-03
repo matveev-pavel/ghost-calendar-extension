@@ -1,0 +1,550 @@
+{
+  "extName": {
+    "message": "Ghost Calendar",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Календарь запланированных публикаций Ghost",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Ghost Calendar",
+    "description": "App title in header"
+  },
+  "btnList": {
+    "message": "Список",
+    "description": "List view button title"
+  },
+  "btnCalendar": {
+    "message": "Календарь",
+    "description": "Calendar view button title"
+  },
+  "btnSelectMultiple": {
+    "message": "Выбрать несколько записей",
+    "description": "Selection mode button title"
+  },
+  "btnManageTags": {
+    "message": "Управление тегами",
+    "description": "Open tags page button title"
+  },
+  "btnFilterByTags": {
+    "message": "Фильтр по тегам",
+    "description": "Filter button title"
+  },
+  "btnFeedback": {
+    "message": "Обратная связь",
+    "description": "Feedback button title"
+  },
+  "btnSettings": {
+    "message": "Настройки",
+    "description": "Settings button title"
+  },
+  "filterMatchAny": {
+    "message": "Любой",
+    "description": "Match any tag filter mode"
+  },
+  "filterMatchAll": {
+    "message": "Все",
+    "description": "Match all tags filter mode"
+  },
+  "filterMatchAnyTitle": {
+    "message": "Совпадение с любым тегом",
+    "description": "Match any tag filter mode tooltip"
+  },
+  "filterMatchAllTitle": {
+    "message": "Совпадение со всеми тегами",
+    "description": "Match all tags filter mode tooltip"
+  },
+  "filterClear": {
+    "message": "Очистить",
+    "description": "Clear filter button"
+  },
+  "filterAddTag": {
+    "message": "Добавить фильтр по тегу",
+    "description": "Add tag to filter button title"
+  },
+  "filterSearchPlaceholder": {
+    "message": "Поиск тегов...",
+    "description": "Filter search input placeholder"
+  },
+  "filterNoResults": {
+    "message": "Теги не найдены",
+    "description": "No tags found in filter dropdown"
+  },
+  "selectionPostsSelected": {
+    "message": "Выбрано записей: $COUNT$",
+    "description": "Selection bar counter",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "selectionAddTag": {
+    "message": "Тег",
+    "description": "Add tag button in selection bar"
+  },
+  "selectionRemoveTag": {
+    "message": "Тег",
+    "description": "Remove tag button in selection bar"
+  },
+  "selectionCancel": {
+    "message": "Отмена",
+    "description": "Cancel selection button"
+  },
+  "loadingPosts": {
+    "message": "Загрузка записей...",
+    "description": "Loading posts message"
+  },
+  "loadingError": {
+    "message": "Ошибка загрузки",
+    "description": "Generic loading error"
+  },
+  "btnRetry": {
+    "message": "Повторить",
+    "description": "Retry button"
+  },
+  "emptyNoPosts": {
+    "message": "Нет запланированных записей",
+    "description": "Empty state message"
+  },
+  "modalAddTag": {
+    "message": "Добавить тег",
+    "description": "Add tag modal title"
+  },
+  "modalRemoveTag": {
+    "message": "Удалить тег",
+    "description": "Remove tag modal title"
+  },
+  "modalSearchPlaceholder": {
+    "message": "Найти или создать тег...",
+    "description": "Bulk tag modal search placeholder"
+  },
+  "tagPlaceholder": {
+    "message": "тег...",
+    "description": "Tag input placeholder"
+  },
+  "addTagTitle": {
+    "message": "Добавить тег",
+    "description": "Add tag button title"
+  },
+  "statusScheduled": {
+    "message": "запланировано",
+    "description": "Scheduled post status"
+  },
+  "statusPublished": {
+    "message": "опубликовано",
+    "description": "Published post status"
+  },
+  "dateToday": {
+    "message": "Сегодня",
+    "description": "Today date label"
+  },
+  "dateYesterday": {
+    "message": "Вчера",
+    "description": "Yesterday date label"
+  },
+  "dateTomorrow": {
+    "message": "Завтра",
+    "description": "Tomorrow date label"
+  },
+  "calendarToday": {
+    "message": "(сегодня)",
+    "description": "Today label in calendar"
+  },
+  "calendarYesterday": {
+    "message": "(вчера)",
+    "description": "Yesterday label in calendar"
+  },
+  "alertSelectPost": {
+    "message": "Пожалуйста, выберите хотя бы одну запись",
+    "description": "Alert when no posts selected"
+  },
+  "alertErrorAddingTag": {
+    "message": "Ошибка добавления тега: $ERROR$",
+    "description": "Error adding tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "alertErrorRemovingTag": {
+    "message": "Ошибка удаления тега: $ERROR$",
+    "description": "Error removing tag alert",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "bulkNoTags": {
+    "message": "Нет доступных тегов",
+    "description": "No tags in bulk tag modal"
+  },
+  "bulkCreateNew": {
+    "message": "+ Создать \"$NAME$\"",
+    "description": "Create new tag option",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "Настройки",
+    "description": "Options page title"
+  },
+  "optionsSubtitle": {
+    "message": "Настройка подключения к вашему блогу Ghost",
+    "description": "Options page subtitle"
+  },
+  "labelLanguage": {
+    "message": "Язык",
+    "description": "Language selector label"
+  },
+  "languageAuto": {
+    "message": "Авто (Браузер)",
+    "description": "Auto-detect language option"
+  },
+  "labelBlogUrl": {
+    "message": "URL блога",
+    "description": "Blog URL field label"
+  },
+  "placeholderBlogUrl": {
+    "message": "https://blog.example.com",
+    "description": "Blog URL placeholder"
+  },
+  "hintBlogUrl": {
+    "message": "Полный URL вашего блога Ghost",
+    "description": "Blog URL hint"
+  },
+  "labelApiKey": {
+    "message": "Admin API Key",
+    "description": "API key field label"
+  },
+  "placeholderApiKey": {
+    "message": "xxxxxxxxxxxxxxxxxxxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy",
+    "description": "API key placeholder"
+  },
+  "hintApiKey": {
+    "message": "Найдите в Ghost Admin: Settings → Integrations →",
+    "description": "API key hint"
+  },
+  "hintApiKeyLink": {
+    "message": "Добавить интеграцию",
+    "description": "API key hint link text"
+  },
+  "btnTest": {
+    "message": "Тест",
+    "description": "Test connection button"
+  },
+  "btnSave": {
+    "message": "Сохранить",
+    "description": "Save button"
+  },
+  "msgTesting": {
+    "message": "Проверка подключения...",
+    "description": "Testing connection status"
+  },
+  "msgConnected": {
+    "message": "Подключено! Найдено записей: $COUNT$",
+    "description": "Connection success message",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "42"
+      }
+    }
+  },
+  "msgSaving": {
+    "message": "Сохранение...",
+    "description": "Saving status"
+  },
+  "msgSaved": {
+    "message": "Настройки сохранены!",
+    "description": "Settings saved message"
+  },
+  "msgSaveError": {
+    "message": "Ошибка сохранения: $ERROR$",
+    "description": "Save error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgError": {
+    "message": "Ошибка: $ERROR$",
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errFillAllFields": {
+    "message": "Пожалуйста, заполните все поля",
+    "description": "Fill all fields error"
+  },
+  "errBlogUrlRequired": {
+    "message": "URL блога не указан",
+    "description": "Blog URL required error"
+  },
+  "errHttpsRequired": {
+    "message": "URL должен использовать HTTPS для безопасного подключения",
+    "description": "HTTPS required error"
+  },
+  "errInvalidUrl": {
+    "message": "Неверный формат URL блога",
+    "description": "Invalid URL error"
+  },
+  "errInvalidApiKey": {
+    "message": "Неверный формат API key",
+    "description": "Invalid API key error"
+  },
+  "errInvalidSecret": {
+    "message": "Неверный формат секрета. Секрет должен быть в hex формате",
+    "description": "Invalid secret error"
+  },
+  "errInvalidSecretLength": {
+    "message": "Неверная длина секрета. Длина должна быть четной",
+    "description": "Invalid secret length error"
+  },
+  "errEnterBlogUrl": {
+    "message": "Сначала введите URL блога",
+    "description": "Enter blog URL first error"
+  },
+  "msgLanguageChanged": {
+    "message": "Язык изменен. Перезагрузите расширение для применения.",
+    "description": "Language change message"
+  },
+  "tagsTitle": {
+    "message": "Управление тегами",
+    "description": "Tags page title"
+  },
+  "btnBackToCalendar": {
+    "message": "Назад к календарю",
+    "description": "Back button title"
+  },
+  "btnNewTag": {
+    "message": "Новый тег",
+    "description": "New tag button"
+  },
+  "tabPublicTags": {
+    "message": "Публичные теги",
+    "description": "Public tags tab"
+  },
+  "tabInternalTags": {
+    "message": "Внутренние теги (#)",
+    "description": "Internal tags tab"
+  },
+  "searchTagsPlaceholder": {
+    "message": "Поиск тегов...",
+    "description": "Search tags placeholder"
+  },
+  "selectAll": {
+    "message": "Выбрать все",
+    "description": "Select all checkbox label"
+  },
+  "selectedCount": {
+    "message": "Выбрано: $COUNT$",
+    "description": "Selected items count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "btnDeleteSelected": {
+    "message": "Удалить выбранные",
+    "description": "Delete selected button"
+  },
+  "loadingTags": {
+    "message": "Загрузка тегов...",
+    "description": "Loading tags message"
+  },
+  "emptyNoTags": {
+    "message": "Теги не найдены",
+    "description": "No tags empty state"
+  },
+  "btnCreateFirstTag": {
+    "message": "Создать первый тег",
+    "description": "Create first tag button"
+  },
+  "modalNewTag": {
+    "message": "Новый тег",
+    "description": "New tag modal title"
+  },
+  "modalEditTag": {
+    "message": "Редактировать тег",
+    "description": "Edit tag modal title"
+  },
+  "labelTagName": {
+    "message": "Название",
+    "description": "Tag name label"
+  },
+  "placeholderTagName": {
+    "message": "Название тега",
+    "description": "Tag name placeholder"
+  },
+  "hintTagName": {
+    "message": "Внутренние теги начинаются с # (например, #featured)",
+    "description": "Tag name hint"
+  },
+  "labelTagSlug": {
+    "message": "Slug",
+    "description": "Tag slug label"
+  },
+  "placeholderTagSlug": {
+    "message": "slug-tega",
+    "description": "Tag slug placeholder"
+  },
+  "hintTagSlug": {
+    "message": "URL-версия (генерируется автоматически)",
+    "description": "Tag slug hint"
+  },
+  "labelTagDescription": {
+    "message": "Описание",
+    "description": "Tag description label"
+  },
+  "placeholderTagDescription": {
+    "message": "Необязательное описание...",
+    "description": "Tag description placeholder"
+  },
+  "btnCancel": {
+    "message": "Отмена",
+    "description": "Cancel button"
+  },
+  "modalDeleteTag": {
+    "message": "Удаление тега",
+    "description": "Delete tag modal title"
+  },
+  "modalDeleteTags": {
+    "message": "Удаление тегов",
+    "description": "Delete multiple tags modal title"
+  },
+  "msgDeleteConfirm": {
+    "message": "Вы уверены, что хотите удалить $NAME$?",
+    "description": "Delete confirmation message",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "my-tag"
+      }
+    }
+  },
+  "msgDeleteMultipleConfirm": {
+    "message": "Вы уверены, что хотите удалить $COUNT$ тегов?",
+    "description": "Delete multiple confirmation",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "msgDeleteWarning": {
+    "message": "Это удалит тег(и) из всех записей.",
+    "description": "Delete warning message"
+  },
+  "btnDelete": {
+    "message": "Удалить",
+    "description": "Delete button"
+  },
+  "errTagNameRequired": {
+    "message": "Название тега обязательно",
+    "description": "Tag name required error"
+  },
+  "errTagNotCreated": {
+    "message": "Тег не был создан - пустой ответ от сервера",
+    "description": "Tag creation error"
+  },
+  "errSavingTag": {
+    "message": "Ошибка сохранения тега: $ERROR$",
+    "description": "Tag save error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTag": {
+    "message": "Ошибка удаления тега: $ERROR$",
+    "description": "Tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "errDeletingTags": {
+    "message": "Ошибка удаления тегов: $ERROR$",
+    "description": "Bulk tag delete error",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Network error"
+      }
+    }
+  },
+  "msgBulkDeleteResult": {
+    "message": "Удалено тегов: $DELETED$. Не удалось удалить: $FAILED$.",
+    "description": "Bulk delete result message",
+    "placeholders": {
+      "deleted": {
+        "content": "$1",
+        "example": "3"
+      },
+      "failed": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "tagPostCount": {
+    "message": "$COUNT$ записей",
+    "description": "Tag post count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "tagPostCountSingle": {
+    "message": "1 запись",
+    "description": "Single post count"
+  },
+  "noTagsMatching": {
+    "message": "Нет тегов, соответствующих \"$QUERY$\"",
+    "description": "No tags matching search",
+    "placeholders": {
+      "query": {
+        "content": "$1",
+        "example": "test"
+      }
+    }
+  },
+  "noPublicTags": {
+    "message": "Публичные теги не найдены",
+    "description": "No public tags message"
+  },
+  "noInternalTags": {
+    "message": "Внутренние теги не найдены",
+    "description": "No internal tags message"
+  },
+  "btnEdit": {
+    "message": "Редактировать",
+    "description": "Edit button title"
+  }
+}
