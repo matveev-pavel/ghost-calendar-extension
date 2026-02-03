@@ -63,10 +63,11 @@
         <button class="mode-btn active" data-mode="AND" title="Match all tags">All</button>
       </div>
       <button class="filter-clear-btn" id="filter-clear-btn" title="Clear filter">Clear</button>
-    </div>
-    <div class="filter-dropdown" id="filter-dropdown" hidden>
-      <input type="text" id="filter-search" placeholder="Search tags...">
-      <div class="filter-options" id="filter-options"></div>
+      <!-- Dropdown inside filter-bar for proper positioning -->
+      <div class="filter-dropdown" id="filter-dropdown" hidden>
+        <input type="text" id="filter-search" placeholder="Search tags..." autofocus>
+        <div class="filter-options" id="filter-options"></div>
+      </div>
     </div>
 
     <!-- Selection bar -->

@@ -105,6 +105,13 @@ body {
   background: #f9fafb;
   border-bottom: 1px solid #e6e6e6;
   flex-wrap: wrap;
+  transition: all 0.15s;
+}
+
+.filter-bar.dropdown-open {
+  background: #fff;
+  border-bottom-color: #30cf43;
+  box-shadow: 0 2px 8px rgba(48, 207, 67, 0.1);
 }
 
 .filter-chips {
@@ -208,16 +215,22 @@ body {
   color: #ef4444;
 }
 
+/* Filter Bar - needs relative positioning for dropdown */
+.filter-bar {
+  position: relative;
+}
+
 /* Filter Dropdown */
 .filter-dropdown {
   position: absolute;
   top: 100%;
-  left: 16px;
-  right: 16px;
+  left: 0;
+  right: 0;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #30cf43;
+  border-radius: 0 0 6px 6px;
+  border-top: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   z-index: 100;
   max-height: 200px;
   display: flex;

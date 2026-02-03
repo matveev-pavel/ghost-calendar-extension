@@ -752,9 +752,11 @@ function toggleFilterDropdown() {
 
 function showFilterDropdown() {
   const dropdown = document.getElementById('filter-dropdown');
+  const filterBar = document.getElementById('filter-bar');
   const search = document.getElementById('filter-search');
 
   dropdown.hidden = false;
+  filterBar.classList.add('dropdown-open');
   search.value = '';
   search.focus();
   renderFilterOptions();
@@ -762,7 +764,10 @@ function showFilterDropdown() {
 
 function hideFilterDropdown() {
   const dropdown = document.getElementById('filter-dropdown');
+  const filterBar = document.getElementById('filter-bar');
+
   dropdown.hidden = true;
+  filterBar.classList.remove('dropdown-open');
 }
 
 function renderFilterOptions() {
