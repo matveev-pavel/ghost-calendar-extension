@@ -47,6 +47,14 @@ function setupEventListeners() {
     chrome.runtime.openOptionsPage();
   });
 
+  // Feedback
+  document.getElementById('open-feedback').addEventListener('click', () => {
+    chrome.tabs.create({
+      url: 'https://github.com/matveev-pavel/ghost-calendar-extension/discussions/new/choose'
+    });
+    analytics.trackFeedbackOpen();
+  });
+
   // Retry loading
   document.getElementById('retry-btn').addEventListener('click', loadPosts);
 
