@@ -34,6 +34,9 @@ function validateBlogUrl(url) {
 
 // Load saved settings
 async function loadSettings() {
+  // Инициализация локализации
+  await initI18n();
+
   const { blogUrl, apiKey, language } = await chrome.storage.local.get(['blogUrl', 'apiKey', 'language']);
   if (blogUrl) blogUrlInput.value = blogUrl;
   if (apiKey) apiKeyInput.value = apiKey;

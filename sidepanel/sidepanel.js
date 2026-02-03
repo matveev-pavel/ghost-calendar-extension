@@ -34,7 +34,8 @@ async function init() {
   analytics.trackPageView('sidepanel');
 
   // Инициализация локализации
-  currentLocale = await getCurrentLocale();
+  await initI18n();
+  currentLocale = getCurrentLocale();
   applyTranslations();
 
   await loadFilterState();

@@ -18,6 +18,8 @@ const errorMessage = document.getElementById('error-message');
 
 // Initialization
 async function init() {
+  // Инициализация локализации
+  await initI18n();
   applyTranslations();
 
   try {
