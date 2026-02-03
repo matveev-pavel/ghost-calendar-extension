@@ -99,8 +99,17 @@
             <p class="form-hint" data-i18n="hintTagSlug">URL-friendly version (auto-generated)</p>
           </div>
           <div class="form-group">
-            <label for="tag-description" data-i18n="labelTagDescription">Description</label>
+            <div class="label-row">
+              <label for="tag-description" data-i18n="labelTagDescription">Description</label>
+              <button type="button" class="ai-generate-btn" id="ai-generate-btn" data-i18n-title="aiGenerateDescription" title="Generate description with AI" hidden>
+                ✨
+              </button>
+            </div>
             <textarea id="tag-description" rows="3" data-i18n-placeholder="placeholderTagDescription" placeholder="Optional description..."></textarea>
+            <div class="description-footer">
+              <span class="ai-hint" id="ai-hint" hidden data-i18n="aiMinPostsRequired">Minimum 2 posts required for AI generation</span>
+              <span class="char-counter" id="char-counter">0 / 500</span>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -127,11 +136,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Replace Description Confirmation Modal -->
+    <div class="modal-overlay" id="replace-modal" hidden>
+      <div class="modal modal-small">
+        <div class="modal-header">
+          <h2 data-i18n="aiReplaceConfirm">Replace existing description?</h2>
+          <button class="modal-close" id="replace-modal-close">×</button>
+        </div>
+        <div class="modal-body">
+          <p data-i18n="aiReplaceMessage">The current description will be replaced with AI-generated text.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-btn" id="replace-cancel" data-i18n="btnCancel">Cancel</button>
+          <button class="primary-btn" id="replace-confirm" data-i18n="btnReplace">Replace</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast" hidden></div>
   </div>
 
   <script src="../lib/api.js"></script>
   <script src="../lib/analytics.js"></script>
   <script src="../lib/i18n.js"></script>
+  <script src="../lib/openrouter.js"></script>
   <script src="tags.js"></script>
 </body>
 </html>
