@@ -11,6 +11,12 @@ let api = null;
 let isGenerating = false;
 let generateAbortController = null;
 
+// Draft storage for unsaved descriptions
+const draftDescriptions = new Map();
+
+// Track mousedown target for proper overlay click detection
+let modalMouseDownTarget = null;
+
 // DOM elements
 const loadingState = document.getElementById('loading-state');
 const errorState = document.getElementById('error-state');
@@ -104,12 +110,25 @@ function setupModalListeners() {
   // Delete tag
   document.getElementById('delete-confirm').addEventListener('click', deleteTag);
 
-  // Close on overlay click
+  // Close on overlay click - only if mousedown AND mouseup both happened on overlay
+  modal.addEventListener('mousedown', (e) => {
+    modalMouseDownTarget = e.target;
+  });
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
+    if (e.target === modal && modalMouseDownTarget === modal) {
+      closeModal();
+    }
+    modalMouseDownTarget = null;
+  });
+
+  deleteModal.addEventListener('mousedown', (e) => {
+    modalMouseDownTarget = e.target;
   });
   deleteModal.addEventListener('click', (e) => {
-    if (e.target === deleteModal) closeDeleteModal();
+    if (e.target === deleteModal && modalMouseDownTarget === deleteModal) {
+      closeDeleteModal();
+    }
+    modalMouseDownTarget = null;
   });
 
   // Auto-generate slug from name
@@ -145,8 +164,14 @@ function setupModalListeners() {
     replaceModal.hidden = true;
     await generateDescription();
   });
+  replaceModal.addEventListener('mousedown', (e) => {
+    modalMouseDownTarget = e.target;
+  });
   replaceModal.addEventListener('click', (e) => {
-    if (e.target === replaceModal) replaceModal.hidden = true;
+    if (e.target === replaceModal && modalMouseDownTarget === replaceModal) {
+      replaceModal.hidden = true;
+    }
+    modalMouseDownTarget = null;
   });
 }
 
@@ -314,7 +339,13 @@ function openEditModal(tagId) {
   document.getElementById('modal-title').textContent = t('modalEditTag');
   document.getElementById('tag-name').value = tag.name;
   document.getElementById('tag-slug').value = tag.slug;
-  document.getElementById('tag-description').value = tag.description || '';
+
+  // Restore draft description if exists, otherwise use original
+  const draftDescription = draftDescriptions.get(tagId);
+  document.getElementById('tag-description').value = draftDescription !== undefined
+    ? draftDescription
+    : (tag.description || '');
+
   document.getElementById('modal-overlay').hidden = false;
   document.getElementById('tag-name').focus();
 
@@ -325,6 +356,21 @@ function openEditModal(tagId) {
 
 function closeModal() {
   abortGeneration();
+
+  // Save draft description if editing existing tag
+  if (editingTagId) {
+    const description = document.getElementById('tag-description').value;
+    const tag = tags.find(t => t.id === editingTagId);
+    const originalDescription = tag?.description || '';
+
+    // Only save draft if it differs from the original
+    if (description !== originalDescription) {
+      draftDescriptions.set(editingTagId, description);
+    } else {
+      draftDescriptions.delete(editingTagId);
+    }
+  }
+
   document.getElementById('modal-overlay').hidden = true;
   editingTagId = null;
 }
@@ -415,6 +461,8 @@ async function saveTag() {
       if (index >= 0) {
         tags[index] = { ...tags[index], ...updated };
       }
+      // Clear draft after successful save
+      draftDescriptions.delete(editingTagId);
       analytics.trackTagUpdate();
     } else {
       const created = await api.createTag(tagData);
@@ -425,7 +473,10 @@ async function saveTag() {
       analytics.trackTagCreate();
     }
 
-    closeModal();
+    // Close modal without saving draft (already saved to server)
+    abortGeneration();
+    editingTagId = null;
+    document.getElementById('modal-overlay').hidden = true;
     renderTags();
   } catch (error) {
     console.error('Save error:', error);
