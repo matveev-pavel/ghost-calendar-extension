@@ -6,6 +6,13 @@ const statusDiv = document.getElementById('status');
 const openIntegrationsLink = document.getElementById('open-integrations');
 const languageSelect = document.getElementById('language');
 
+// AI Settings elements
+const openrouterKeyInput = document.getElementById('openrouter-key');
+const modelFilterSelect = document.getElementById('model-filter');
+const openrouterModelSelect = document.getElementById('openrouter-model');
+const generationLanguageSelect = document.getElementById('generation-language');
+const customPromptTextarea = document.getElementById('custom-prompt');
+
 // Инициализация аналитики
 analytics.init().then(() => {
   analytics.trackPageView('options');
@@ -32,17 +39,72 @@ function validateBlogUrl(url) {
   }
 }
 
+// Load OpenRouter models based on filter
+async function loadModels(filter = 'recommended') {
+  const apiKey = openrouterKeyInput.value.trim();
+
+  openrouterModelSelect.innerHTML = '<option value="">Loading...</option>';
+  openrouterModelSelect.disabled = true;
+
+  try {
+    let models;
+    if (filter === 'recommended') {
+      models = RECOMMENDED_MODELS;
+    } else if (apiKey) {
+      const api = new OpenRouterAPI(apiKey);
+      models = await api.getModels(filter);
+    } else {
+      models = RECOMMENDED_MODELS;
+      showStatus(t('errOpenRouterKeyRequired'), 'error');
+    }
+
+    openrouterModelSelect.innerHTML = models
+      .map(m => `<option value="${m.id}">${m.name}</option>`)
+      .join('');
+
+    // Restore saved model selection
+    const { openrouterModel } = await chrome.storage.local.get(['openrouterModel']);
+    if (openrouterModel) {
+      openrouterModelSelect.value = openrouterModel;
+    }
+  } catch (error) {
+    console.error('Error loading models:', error);
+    openrouterModelSelect.innerHTML = RECOMMENDED_MODELS
+      .map(m => `<option value="${m.id}">${m.name}</option>`)
+      .join('');
+  } finally {
+    openrouterModelSelect.disabled = false;
+  }
+}
+
 // Load saved settings
 async function loadSettings() {
   // Инициализация локализации
   await initI18n();
 
-  const { blogUrl, apiKey, language } = await chrome.storage.local.get(['blogUrl', 'apiKey', 'language']);
-  if (blogUrl) blogUrlInput.value = blogUrl;
-  if (apiKey) apiKeyInput.value = apiKey;
-  if (language) languageSelect.value = language;
+  const settings = await chrome.storage.local.get([
+    'blogUrl', 'apiKey', 'language',
+    'openrouterApiKey', 'openrouterModel', 'openrouterLanguage',
+    'openrouterCustomPrompt', 'openrouterModelFilter'
+  ]);
+
+  if (settings.blogUrl) blogUrlInput.value = settings.blogUrl;
+  if (settings.apiKey) apiKeyInput.value = settings.apiKey;
+  if (settings.language) languageSelect.value = settings.language;
+
+  // AI Settings
+  if (settings.openrouterApiKey) openrouterKeyInput.value = settings.openrouterApiKey;
+  if (settings.openrouterModelFilter) modelFilterSelect.value = settings.openrouterModelFilter;
+  if (settings.openrouterLanguage) generationLanguageSelect.value = settings.openrouterLanguage;
+  if (settings.openrouterCustomPrompt) customPromptTextarea.value = settings.openrouterCustomPrompt;
 
   applyTranslations();
+
+  // Load models after settings loaded
+  await loadModels(settings.openrouterModelFilter || 'recommended');
+  if (settings.openrouterModel) {
+    openrouterModelSelect.value = settings.openrouterModel;
+  }
 }
 
 // Show status
@@ -183,6 +245,16 @@ async function saveSettings(e) {
 
   try {
     await chrome.storage.local.set({ blogUrl, apiKey });
+
+    // Save AI settings
+    await chrome.storage.local.set({
+      openrouterApiKey: openrouterKeyInput.value.trim(),
+      openrouterModel: openrouterModelSelect.value,
+      openrouterModelFilter: modelFilterSelect.value,
+      openrouterLanguage: generationLanguageSelect.value,
+      openrouterCustomPrompt: customPromptTextarea.value.trim()
+    });
+
     showStatus(t('msgSaved'), 'success');
 
     // Analytics: сохранение настроек
@@ -213,6 +285,17 @@ languageSelect.addEventListener('change', async () => {
   const language = languageSelect.value;
   await chrome.storage.local.set({ language: language || null });
   showStatus(t('msgLanguageChanged'), 'success');
+});
+
+// AI Settings event listeners
+modelFilterSelect.addEventListener('change', () => {
+  loadModels(modelFilterSelect.value);
+});
+
+openrouterKeyInput.addEventListener('change', () => {
+  if (modelFilterSelect.value !== 'recommended') {
+    loadModels(modelFilterSelect.value);
+  }
 });
 
 // Load settings on page open
