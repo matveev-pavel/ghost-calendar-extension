@@ -4,10 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 let GhostAPI;
 beforeEach(async () => {
   // Reset mocks
-  globalThis.fetch = vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => ({ posts: [{ id: '1', title: 'Test' }] })
-  });
+  const data = { posts: [{ id: '1', title: 'Test' }] };
+  globalThis.fetch = vi.fn().mockResolvedValue(createMockResponse(data));
 
   // Reload module
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');

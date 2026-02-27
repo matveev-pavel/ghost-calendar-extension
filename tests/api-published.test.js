@@ -2,14 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 let GhostAPI;
 beforeEach(async () => {
-  globalThis.fetch = vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => ({
-      posts: [
-        { id: '1', title: 'Published Post', status: 'published', published_at: '2026-01-23T10:00:00Z' }
-      ]
-    })
-  });
+  const data = { posts: [{ id: '1', title: 'Published Post', status: 'published', published_at: '2026-01-23T10:00:00Z' }] };
+  globalThis.fetch = vi.fn().mockResolvedValue(createMockResponse(data));
 
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
   const module = { exports: {} };
@@ -37,10 +31,7 @@ describe('GhostAPI.getPublishedPosts()', () => {
   });
 
   it('returns empty array if no posts', async () => {
-    fetch.mockResolvedValue({
-      ok: true,
-      json: async () => ({ posts: [] })
-    });
+    fetch.mockResolvedValue(createMockResponse({ posts: [] }));
 
     const api = new GhostAPI('https://blog.example.com', 'id123:aabbccdd');
     api.token = 'fake-token';

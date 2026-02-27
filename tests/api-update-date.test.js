@@ -2,25 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 let GhostAPI;
 beforeEach(async () => {
+  const getResponse = { posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }] };
+  const putResponse = { posts: [{ id: 'post-1', published_at: '2026-01-25T10:00:00Z', updated_at: '2026-01-25T10:00:01Z' }] };
+
   globalThis.fetch = vi.fn()
-    // First call — GET updated_at
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }]
-      })
-    })
-    // Second call — PUT
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        posts: [{
-          id: 'post-1',
-          published_at: '2026-01-25T10:00:00Z',
-          updated_at: '2026-01-25T10:00:01Z'
-        }]
-      })
-    });
+    .mockResolvedValueOnce(createMockResponse(getResponse))
+    .mockResolvedValueOnce(createMockResponse(putResponse));
 
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
   const module = { exports: {} };

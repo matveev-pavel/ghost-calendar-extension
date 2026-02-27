@@ -30,11 +30,18 @@ Object.defineProperty(globalThis, 'crypto', {
   configurable: true
 });
 
-// Mock fetch
-globalThis.fetch = async (url, opts) => ({
-  ok: true,
-  json: async () => ({ posts: [], tags: [] })
+// Helper to create mock Response
+globalThis.createMockResponse = (data, status = 200, ok = true) => ({
+  ok,
+  status,
+  json: async () => data,
+  text: async () => JSON.stringify(data)
 });
+
+// Mock fetch with full Response-like object
+globalThis.fetch = async (url, opts) => {
+  return createMockResponse({ posts: [], tags: [] });
+};
 
 // Mock btoa
 if (typeof globalThis.btoa === 'undefined') {

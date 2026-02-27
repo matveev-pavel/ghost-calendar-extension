@@ -2,25 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 let GhostAPI;
 beforeEach(async () => {
+  const getResponse = { posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }] };
+  const putResponse = { posts: [{ id: 'post-1', tags: [{ id: 't1', name: 'ai' }, { id: 't2', name: 'guide' }], updated_at: '2026-01-23T12:00:00Z' }] };
+
   globalThis.fetch = vi.fn()
-    // GET updated_at
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }]
-      })
-    })
-    // PUT
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        posts: [{
-          id: 'post-1',
-          tags: [{ id: 't1', name: 'ai' }, { id: 't2', name: 'guide' }],
-          updated_at: '2026-01-23T12:00:00Z'
-        }]
-      })
-    });
+    .mockResolvedValueOnce(createMockResponse(getResponse))
+    .mockResolvedValueOnce(createMockResponse(putResponse));
 
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
   const module = { exports: {} };
@@ -53,19 +40,12 @@ describe('GhostAPI.updatePostTags()', () => {
   });
 
   it('converts string tags to objects with name', async () => {
+    const getResp = { posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }] };
+    const putResp = { posts: [{ id: 'post-1', tags: [{ name: 'ai' }, { name: 'guide' }], updated_at: '2026-01-23T12:00:00Z' }] };
+
     const mockFetch = vi.fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          posts: [{ id: 'post-1', updated_at: '2026-01-23T09:00:00Z' }]
-        })
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          posts: [{ id: 'post-1', tags: [{ name: 'ai' }, { name: 'guide' }], updated_at: '2026-01-23T12:00:00Z' }]
-        })
-      });
+      .mockResolvedValueOnce(createMockResponse(getResp))
+      .mockResolvedValueOnce(createMockResponse(putResp));
 
     const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
     const mod = { exports: {} };

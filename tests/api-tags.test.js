@@ -2,16 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 let GhostAPI;
 beforeEach(async () => {
-  globalThis.fetch = vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => ({
-      tags: [
-        { id: 't1', name: 'ai', slug: 'ai' },
-        { id: 't2', name: 'guide', slug: 'guide' }
-      ],
-      meta: { pagination: { next: null } }
-    })
-  });
+  const data = {
+    tags: [
+      { id: 't1', name: 'ai', slug: 'ai' },
+      { id: 't2', name: 'guide', slug: 'guide' }
+    ],
+    meta: { pagination: { next: null } }
+  };
+  globalThis.fetch = vi.fn().mockResolvedValue(createMockResponse(data));
 
   const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
   const module = { exports: {} };
@@ -40,16 +38,14 @@ describe('GhostAPI.getAllTags()', () => {
 
 describe('GhostAPI.getTagsWithCount()', () => {
   it('loads tags with post count using pagination', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        tags: [
-          { id: 't1', name: 'ai', slug: 'ai', count: { posts: 5 } },
-          { id: 't2', name: 'guide', slug: 'guide', count: { posts: 3 } }
-        ],
-        meta: { pagination: { next: null } }
-      })
-    });
+    const data = {
+      tags: [
+        { id: 't1', name: 'ai', slug: 'ai', count: { posts: 5 } },
+        { id: 't2', name: 'guide', slug: 'guide', count: { posts: 3 } }
+      ],
+      meta: { pagination: { next: null } }
+    };
+    const mockFetch = vi.fn().mockResolvedValue(createMockResponse(data));
     globalThis.fetch = mockFetch;
 
     // Re-import API with new fetch
@@ -76,12 +72,8 @@ describe('GhostAPI.getTagsWithCount()', () => {
 
 describe('GhostAPI.createTag()', () => {
   it('creates a new tag', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        tags: [{ id: 'new-tag-id', name: 'new-tag', slug: 'new-tag' }]
-      })
-    });
+    const data = { tags: [{ id: 'new-tag-id', name: 'new-tag', slug: 'new-tag' }] };
+    const mockFetch = vi.fn().mockResolvedValue(createMockResponse(data));
     globalThis.fetch = mockFetch;
 
     const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
@@ -108,12 +100,8 @@ describe('GhostAPI.createTag()', () => {
 
 describe('GhostAPI.updateTag()', () => {
   it('updates an existing tag', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        tags: [{ id: 't1', name: 'updated-tag', slug: 'updated-tag' }]
-      })
-    });
+    const data = { tags: [{ id: 't1', name: 'updated-tag', slug: 'updated-tag' }] };
+    const mockFetch = vi.fn().mockResolvedValue(createMockResponse(data));
     globalThis.fetch = mockFetch;
 
     const code = (await import('fs')).readFileSync('./lib/api.js', 'utf-8');
@@ -138,9 +126,12 @@ describe('GhostAPI.updateTag()', () => {
 
 describe('GhostAPI.deleteTag()', () => {
   it('deletes a tag', async () => {
+    // DELETE returns 204 No Content with empty body
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({})
+      status: 204,
+      json: async () => ({}),
+      text: async () => ''
     });
     globalThis.fetch = mockFetch;
 
