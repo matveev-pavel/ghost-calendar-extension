@@ -71,6 +71,11 @@ function setupEventListeners() {
   // Retry loading
   document.getElementById('retry-btn').addEventListener('click', loadPosts);
 
+  // Open settings from error state
+  document.getElementById('open-settings-btn').addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+  });
+
   // Calendar navigation
   document.getElementById('prev-month').addEventListener('click', async () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
@@ -174,6 +179,11 @@ async function loadPosts() {
     console.error('Loading error:', error);
     errorMessage.textContent = error.message;
     showState('error');
+
+    // Show "Open Settings" button when settings are not configured
+    const openSettingsBtn = document.getElementById('open-settings-btn');
+    const isSettingsError = error.message.includes('Settings not configured');
+    openSettingsBtn.style.display = isSettingsError ? 'inline-block' : 'none';
 
     // Analytics: отслеживание ошибки загрузки
     analytics.trackError('load_error', error.message);
