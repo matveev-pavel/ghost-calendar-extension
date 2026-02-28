@@ -148,6 +148,31 @@ function setupEventListeners() {
   document.getElementById('toggle-selection').addEventListener('click', () => {
     toggleSelectionMode();
   });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Ignore when typing in input/textarea
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+    switch (e.key.toLowerCase()) {
+      case 'l':
+        switchView('list');
+        break;
+      case 'c':
+        switchView('calendar');
+        break;
+      case 'f':
+        toggleFilterBar();
+        break;
+      case 's':
+        chrome.runtime.openOptionsPage();
+        break;
+      case 'r':
+        loadPosts();
+        break;
+    }
+  });
 }
 
 // Switch between views
