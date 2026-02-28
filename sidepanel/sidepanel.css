@@ -1066,6 +1066,22 @@ body {
   background: var(--text-muted);
 }
 
+/* Draft items */
+.post-item.draft-item {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.status-draft {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.drafts-group {
+  border-top: 2px dashed var(--border);
+  margin-top: 8px;
+}
+
 /* Footer */
 .footer {
   padding: 6px 16px;

@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "초안 표시",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "초안",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "미예약 초안",
+    "description": "Unscheduled drafts section header"
   }
 }

@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Entwürfe anzeigen",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "Entwurf",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Ungeplante Entwürfe",
+    "description": "Unscheduled drafts section header"
   }
 }

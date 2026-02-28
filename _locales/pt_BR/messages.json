@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Mostrar rascunhos",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "rascunho",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Rascunhos n\u00e3o agendados",
+    "description": "Unscheduled drafts section header"
   }
 }

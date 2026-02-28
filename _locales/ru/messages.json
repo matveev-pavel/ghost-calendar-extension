@@ -685,5 +685,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Показать черновики",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "черновик",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Неопубликованные черновики",
+    "description": "Unscheduled drafts section header"
   }
 }

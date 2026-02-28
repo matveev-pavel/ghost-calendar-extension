@@ -685,5 +685,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Show drafts",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "draft",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Unscheduled Drafts",
+    "description": "Unscheduled drafts section header"
   }
 }

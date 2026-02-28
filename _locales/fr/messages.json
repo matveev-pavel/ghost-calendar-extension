@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Afficher les brouillons",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "brouillon",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Brouillons non planifi\u00e9s",
+    "description": "Unscheduled drafts section header"
   }
 }

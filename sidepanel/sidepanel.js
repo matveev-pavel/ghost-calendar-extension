@@ -17,6 +17,10 @@ let selectionMode = false;
 let selectedPosts = new Set();
 let bulkAction = null; // 'add' or 'remove'
 
+// Drafts state
+let showDrafts = false;
+let draftPosts = [];
+
 // Auto-refresh state
 let refreshInterval = null;
 let lastUpdatedAt = null;
@@ -149,6 +153,18 @@ function setupEventListeners() {
     toggleSelectionMode();
   });
 
+  // Toggle drafts
+  document.getElementById('toggle-drafts').addEventListener('click', async () => {
+    showDrafts = !showDrafts;
+    document.getElementById('toggle-drafts').classList.toggle('active', showDrafts);
+    chrome.storage.local.set({ showDrafts });
+    if (showDrafts && draftPosts.length === 0 && api) {
+      draftPosts = await api.getDraftPosts();
+    }
+    renderList();
+    renderCalendar();
+  });
+
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     // Ignore when typing in input/textarea
@@ -221,6 +237,14 @@ async function loadPosts() {
       (a, b) => new Date(a.published_at) - new Date(b.published_at)
     );
     allTags = tags;
+
+    // Load drafts if enabled
+    const { showDrafts: savedShowDrafts } = await chrome.storage.local.get(['showDrafts']);
+    if (savedShowDrafts !== undefined) showDrafts = savedShowDrafts;
+    document.getElementById('toggle-drafts').classList.toggle('active', showDrafts);
+    if (showDrafts) {
+      draftPosts = await api.getDraftPosts();
+    }
 
     // Fill datalist for tag autocomplete
     const datalist = document.getElementById('tags-datalist');
@@ -367,6 +391,38 @@ function renderList() {
       </div>
     `;
   }).join('');
+
+  // Render unscheduled drafts at the bottom
+  if (showDrafts && draftPosts.length > 0) {
+    const unscheduledDrafts = draftPosts.filter(d => !d.published_at);
+
+    if (unscheduledDrafts.length > 0) {
+      const draftsHtml = unscheduledDrafts.map(post => {
+        const imageHtml = post.feature_image
+          ? `<img class="post-image" src="${escapeHtml(post.feature_image)}" alt="">`
+          : `<div class="post-image post-image-placeholder"></div>`;
+
+        return `
+          <div class="post-item draft-item" data-id="${escapeHtml(String(post.id))}" data-status="draft">
+            ${imageHtml}
+            <div class="post-content">
+              <span class="post-title">${escapeHtml(post.title)}</span>
+              <div class="post-meta">
+                <span class="post-status status-draft">${t('statusDraft')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      postsList.innerHTML += `
+        <div class="date-group drafts-group">
+          <div class="date-header">${t('draftsUnscheduled')}</div>
+          ${draftsHtml}
+        </div>
+      `;
+    }
+  }
 
   // Click on post — open editor or toggle selection
   postsList.querySelectorAll('.post-item').forEach(item => {

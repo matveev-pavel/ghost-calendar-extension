@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "下書きを表示",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "下書き",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "未スケジュールの下書き",
+    "description": "Unscheduled drafts section header"
   }
 }

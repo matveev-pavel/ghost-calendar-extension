@@ -569,5 +569,17 @@
     "placeholders": {
       "time": { "content": "$1", "example": "14:30" }
     }
+  },
+  "btnShowDrafts": {
+    "message": "Mostra bozze",
+    "description": "Toggle drafts visibility"
+  },
+  "statusDraft": {
+    "message": "bozza",
+    "description": "Draft post status"
+  },
+  "draftsUnscheduled": {
+    "message": "Bozze non programmate",
+    "description": "Unscheduled drafts section header"
   }
 }
