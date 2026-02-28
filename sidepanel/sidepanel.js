@@ -17,6 +17,11 @@ let selectionMode = false;
 let selectedPosts = new Set();
 let bulkAction = null; // 'add' or 'remove'
 
+// Auto-refresh state
+let refreshInterval = null;
+let lastUpdatedAt = null;
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
 // DOM elements
 const loadingState = document.getElementById('loading-state');
 const errorState = document.getElementById('error-state');
@@ -26,6 +31,28 @@ const calendarView = document.getElementById('calendar-view');
 const postsList = document.getElementById('posts-list');
 const monthTitle = document.getElementById('month-title');
 const errorMessage = document.getElementById('error-message');
+
+function startAutoRefresh() {
+  stopAutoRefresh();
+  refreshInterval = setInterval(async () => {
+    await loadPosts();
+  }, REFRESH_INTERVAL_MS);
+}
+
+function stopAutoRefresh() {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = null;
+  }
+}
+
+function updateLastUpdated() {
+  lastUpdatedAt = new Date();
+  const footer = document.getElementById('footer');
+  const label = document.getElementById('last-updated');
+  footer.style.display = 'block';
+  label.textContent = t('lastUpdated', [formatTimeLocalized(lastUpdatedAt, currentLocale)]);
+}
 
 // Initialization
 async function init() {
@@ -192,6 +219,8 @@ async function loadPosts() {
     showState('loaded');
     renderList();
     renderCalendar();
+    updateLastUpdated();
+    startAutoRefresh();
   } catch (error) {
     console.error('Loading error:', error);
     errorMessage.textContent = error.message;
@@ -201,6 +230,8 @@ async function loadPosts() {
     const openSettingsBtn = document.getElementById('open-settings-btn');
     const isSettingsError = error.message.includes('Settings not configured');
     openSettingsBtn.style.display = isSettingsError ? 'inline-block' : 'none';
+
+    stopAutoRefresh();
 
     // Analytics: отслеживание ошибки загрузки
     analytics.trackError('load_error', error.message);

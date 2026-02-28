@@ -678,5 +678,12 @@
   "themeDark": {
     "message": "Dark",
     "description": "Dark theme option"
+  },
+  "lastUpdated": {
+    "message": "Updated at $TIME$",
+    "description": "Last updated timestamp",
+    "placeholders": {
+      "time": { "content": "$1", "example": "14:30" }
+    }
   }
 }
