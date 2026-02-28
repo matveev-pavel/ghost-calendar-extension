@@ -662,5 +662,21 @@
         "example": "500"
       }
     }
+  },
+  "labelTheme": {
+    "message": "Theme",
+    "description": "Theme selector label"
+  },
+  "themeAuto": {
+    "message": "Auto (System)",
+    "description": "Auto theme option"
+  },
+  "themeLight": {
+    "message": "Light",
+    "description": "Light theme option"
+  },
+  "themeDark": {
+    "message": "Dark",
+    "description": "Dark theme option"
   }
 }

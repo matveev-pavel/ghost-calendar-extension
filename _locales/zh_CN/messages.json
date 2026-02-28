@@ -546,5 +546,21 @@
   "btnEdit": {
     "message": "编辑",
     "description": "Edit button title"
+  },
+  "labelTheme": {
+    "message": "主题",
+    "description": "Theme selector label"
+  },
+  "themeAuto": {
+    "message": "自动（跟随系统）",
+    "description": "Auto theme option"
+  },
+  "themeLight": {
+    "message": "浅色",
+    "description": "Light theme option"
+  },
+  "themeDark": {
+    "message": "深色",
+    "description": "Dark theme option"
   }
 }

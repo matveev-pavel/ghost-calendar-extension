@@ -546,5 +546,21 @@
   "btnEdit": {
     "message": "編集",
     "description": "Edit button title"
+  },
+  "labelTheme": {
+    "message": "テーマ",
+    "description": "Theme selector label"
+  },
+  "themeAuto": {
+    "message": "自動（システム）",
+    "description": "Auto theme option"
+  },
+  "themeLight": {
+    "message": "ライト",
+    "description": "Light theme option"
+  },
+  "themeDark": {
+    "message": "ダーク",
+    "description": "Dark theme option"
   }
 }

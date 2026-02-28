@@ -83,7 +83,7 @@ async function loadSettings() {
   await initI18n();
 
   const settings = await chrome.storage.local.get([
-    'blogUrl', 'apiKey', 'language',
+    'blogUrl', 'apiKey', 'language', 'theme',
     'openrouterApiKey', 'openrouterModel', 'openrouterLanguage',
     'openrouterCustomPrompt', 'openrouterModelFilter'
   ]);
@@ -91,6 +91,7 @@ async function loadSettings() {
   if (settings.blogUrl) blogUrlInput.value = settings.blogUrl;
   if (settings.apiKey) apiKeyInput.value = settings.apiKey;
   if (settings.language) languageSelect.value = settings.language;
+  if (settings.theme) document.getElementById('theme').value = settings.theme;
 
   // AI Settings
   if (settings.openrouterApiKey) openrouterKeyInput.value = settings.openrouterApiKey;
@@ -244,7 +245,7 @@ async function saveSettings(e) {
   showStatus(t('msgSaving'), 'loading');
 
   try {
-    await chrome.storage.local.set({ blogUrl, apiKey });
+    await chrome.storage.local.set({ blogUrl, apiKey, theme: document.getElementById('theme').value || null });
 
     // Save AI settings
     await chrome.storage.local.set({
@@ -285,6 +286,11 @@ languageSelect.addEventListener('change', async () => {
   const language = languageSelect.value;
   await chrome.storage.local.set({ language: language || null });
   showStatus(t('msgLanguageChanged'), 'success');
+});
+
+document.getElementById('theme').addEventListener('change', async () => {
+  const theme = document.getElementById('theme').value;
+  await chrome.storage.local.set({ theme: theme || null });
 });
 
 // AI Settings event listeners

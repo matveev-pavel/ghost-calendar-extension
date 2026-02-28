@@ -1,4 +1,12 @@
 
+// Apply theme
+(async () => {
+  const { theme } = await chrome.storage.local.get(['theme']);
+  if (theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+
 // Application state
 let tags = [];
 let currentTab = 'public';

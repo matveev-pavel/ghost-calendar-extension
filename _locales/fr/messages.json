@@ -546,5 +546,21 @@
   "btnEdit": {
     "message": "Modifier",
     "description": "Edit button title"
+  },
+  "labelTheme": {
+    "message": "Th\u00e8me",
+    "description": "Theme selector label"
+  },
+  "themeAuto": {
+    "message": "Automatique (Syst\u00e8me)",
+    "description": "Auto theme option"
+  },
+  "themeLight": {
+    "message": "Clair",
+    "description": "Light theme option"
+  },
+  "themeDark": {
+    "message": "Sombre",
+    "description": "Dark theme option"
   }
 }

@@ -662,5 +662,21 @@
         "example": "500"
       }
     }
+  },
+  "labelTheme": {
+    "message": "Тема",
+    "description": "Theme selector label"
+  },
+  "themeAuto": {
+    "message": "Авто (Системная)",
+    "description": "Auto theme option"
+  },
+  "themeLight": {
+    "message": "Светлая",
+    "description": "Light theme option"
+  },
+  "themeDark": {
+    "message": "Тёмная",
+    "description": "Dark theme option"
   }
 }

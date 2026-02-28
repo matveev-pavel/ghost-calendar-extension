@@ -36,6 +36,12 @@ async function init() {
   // Инициализация локализации
   await initI18n();
   currentLocale = getCurrentLocale();
+
+  const { theme } = await chrome.storage.local.get(['theme']);
+  if (theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
   applyTranslations();
 
   await loadFilterState();
@@ -43,6 +49,17 @@ async function init() {
   setupFilterListeners();
   setupSelectionListeners();
   await loadPosts();
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.theme) {
+      const newTheme = changes.theme.newValue;
+      if (newTheme) {
+        document.documentElement.setAttribute('data-theme', newTheme);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    }
+  });
 }
 
 // Setup event listeners
