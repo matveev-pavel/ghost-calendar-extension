@@ -5,6 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="optionsTitle">Ghost Calendar - Settings</title>
   <style>
+    :root {
+      --bg-primary: #fff;
+      --bg-secondary: #f9fafb;
+      --text-primary: #15171a;
+      --text-secondary: #738a94;
+      --text-muted: #a0a0a0;
+      --border: #e6e6e6;
+      --border-hover: #a0a0a0;
+      --accent: #30cf43;
+      --btn-bg: #15171a;
+      --btn-bg-hover: #394047;
+      --btn-text: #fff;
+      --danger: #c53030;
+      --success-bg: #f0fdf0;
+      --success-text: #1a7f37;
+      --success-border: #d4f7d6;
+      --error-bg: #fff5f5;
+      --error-text: #c53030;
+      --error-border: #fed7d7;
+      --loading-bg: #f9fafb;
+      --loading-text: #738a94;
+      --loading-border: #e6e6e6;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1e1e1e;
+      --bg-secondary: #161616;
+      --text-primary: #e5e5e5;
+      --text-secondary: #999;
+      --text-muted: #666;
+      --border: #333;
+      --border-hover: #555;
+      --accent: #30cf43;
+      --btn-bg: #333;
+      --btn-bg-hover: #444;
+      --btn-text: #e5e5e5;
+      --danger: #f87171;
+      --success-bg: #1a2e1a;
+      --success-text: #4ade80;
+      --success-border: #2d4a2d;
+      --error-bg: #2e1a1a;
+      --error-text: #f87171;
+      --error-border: #4a2d2d;
+      --loading-bg: #2a2a2a;
+      --loading-text: #999;
+      --loading-border: #333;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg-primary: #1e1e1e;
+        --bg-secondary: #161616;
+        --text-primary: #e5e5e5;
+        --text-secondary: #999;
+        --text-muted: #666;
+        --border: #333;
+        --border-hover: #555;
+        --accent: #30cf43;
+        --btn-bg: #333;
+        --btn-bg-hover: #444;
+        --btn-text: #e5e5e5;
+        --danger: #f87171;
+        --success-bg: #1a2e1a;
+        --success-text: #4ade80;
+        --success-border: #2d4a2d;
+        --error-bg: #2e1a1a;
+        --error-text: #f87171;
+        --error-border: #4a2d2d;
+        --loading-bg: #2a2a2a;
+        --loading-text: #999;
+        --loading-border: #333;
+      }
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,7 +87,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: #f9fafb;
+      background: var(--bg-secondary);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -22,7 +96,7 @@
     }
 
     .container {
-      background: white;
+      background: var(--bg-primary);
       border-radius: 5px;
       box-shadow: 0 0 1px rgba(0, 0, 0, 0.12), 0 1px 6px rgba(0, 0, 0, 0.03), 0 6px 10px -8px rgba(0, 0, 0, 0.1);
       padding: 32px 40px;
@@ -36,14 +110,14 @@
     }
 
     .header h1 {
-      color: #15171a;
+      color: var(--text-primary);
       font-size: 22px;
       font-weight: 700;
       margin-bottom: 6px;
     }
 
     .header p {
-      color: #738a94;
+      color: var(--text-secondary);
       font-size: 14px;
     }
 
@@ -53,7 +127,7 @@
 
     label {
       display: block;
-      color: #15171a;
+      color: var(--text-primary);
       font-size: 13px;
       font-weight: 600;
       margin-bottom: 8px;
@@ -62,48 +136,49 @@
     input {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #e6e6e6;
+      border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 14px;
-      color: #15171a;
+      color: var(--text-primary);
+      background: var(--bg-primary);
       transition: border-color 0.15s, box-shadow 0.15s;
     }
 
     input:focus {
       outline: none;
-      border-color: #a0a0a0;
+      border-color: var(--border-hover);
       box-shadow: none;
     }
 
     input::placeholder {
-      color: #a0a0a0;
+      color: var(--text-muted);
     }
 
     select {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #e6e6e6;
+      border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 14px;
-      color: #15171a;
-      background: white;
+      color: var(--text-primary);
+      background: var(--bg-primary);
       cursor: pointer;
       transition: border-color 0.15s;
     }
 
     select:focus {
       outline: none;
-      border-color: #a0a0a0;
+      border-color: var(--border-hover);
     }
 
     .hint {
       margin-top: 6px;
       font-size: 12px;
-      color: #738a94;
+      color: var(--text-secondary);
     }
 
     .hint a {
-      color: #30cf43;
+      color: var(--accent);
       text-decoration: none;
     }
 
@@ -129,22 +204,22 @@
     }
 
     .btn-primary {
-      background: #15171a;
-      color: white;
+      background: var(--btn-bg);
+      color: var(--btn-text);
     }
 
     .btn-primary:hover {
-      background: #394047;
+      background: var(--btn-bg-hover);
     }
 
     .btn-secondary {
-      background: #fff;
-      color: #15171a;
-      border: 1px solid #e6e6e6;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
     }
 
     .btn-secondary:hover {
-      border-color: #c5d2d9;
+      border-color: var(--border-hover);
     }
 
     .status {
@@ -157,33 +232,33 @@
 
     .status.success {
       display: block;
-      background: #f0fdf0;
-      color: #1a7f37;
-      border: 1px solid #d4f7d6;
+      background: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid var(--success-border);
     }
 
     .status.error {
       display: block;
-      background: #fff5f5;
-      color: #c53030;
-      border: 1px solid #fed7d7;
+      background: var(--error-bg);
+      color: var(--error-text);
+      border: 1px solid var(--error-border);
     }
 
     .status.loading {
       display: block;
-      background: #f9fafb;
-      color: #738a94;
-      border: 1px solid #e6e6e6;
+      background: var(--loading-bg);
+      color: var(--loading-text);
+      border: 1px solid var(--loading-border);
     }
 
     .section-divider {
       height: 1px;
-      background: #e6e6e6;
+      background: var(--border);
       margin: 28px 0;
     }
 
     .section-title {
-      color: #15171a;
+      color: var(--text-primary);
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 20px;
@@ -201,18 +276,19 @@
     textarea {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #e6e6e6;
+      border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 14px;
       font-family: inherit;
-      color: #15171a;
+      color: var(--text-primary);
+      background: var(--bg-primary);
       resize: vertical;
       transition: border-color 0.15s;
     }
 
     textarea:focus {
       outline: none;
-      border-color: #a0a0a0;
+      border-color: var(--border-hover);
     }
   </style>
 </head>

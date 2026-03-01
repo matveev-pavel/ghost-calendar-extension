@@ -91,7 +91,10 @@ async function loadSettings() {
   if (settings.blogUrl) blogUrlInput.value = settings.blogUrl;
   if (settings.apiKey) apiKeyInput.value = settings.apiKey;
   if (settings.language) languageSelect.value = settings.language;
-  if (settings.theme) document.getElementById('theme').value = settings.theme;
+  if (settings.theme) {
+    document.getElementById('theme').value = settings.theme;
+    document.documentElement.setAttribute('data-theme', settings.theme);
+  }
 
   // AI Settings
   if (settings.openrouterApiKey) openrouterKeyInput.value = settings.openrouterApiKey;
@@ -291,6 +294,11 @@ languageSelect.addEventListener('change', async () => {
 document.getElementById('theme').addEventListener('change', async () => {
   const theme = document.getElementById('theme').value;
   await chrome.storage.local.set({ theme: theme || null });
+  if (theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
 });
 
 // AI Settings event listeners
